@@ -4,7 +4,7 @@ This is the controlling Phase 1 summary. Detailed specifications are linked in S
 
 ## Delivery status after Phase 1
 
-The Phase 1 design has since been implemented through Sprint 3. The InfinityFree production database now contains the Sprint 0–2 content plus the Sprint 3 assessment dependency block: 18 tables and 17 unique migration records. The shipped learner subset is the Exercise/Attempt/Result vertical; Writing, Speaking, and Exam tables exist for dependency order but remain empty until their approved later sprints. Sprint 3 is production-verified; Sprint 4 has not been started.
+The Phase 1 design has since been implemented through Sprint 4. The InfinityFree production database contains the Sprint 0–2 content plus the Sprint 3 assessment dependency block: 18 tables and 17 unique migration records. Sprint 4 is application-only: its History and wrong-answer Review pages derive from immutable Sprint 3 snapshots and add no tables or migration rows. Writing, Speaking, and Exam workflows remain unopened.
 
 # A. Executive Summary
 

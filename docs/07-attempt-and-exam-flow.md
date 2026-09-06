@@ -17,7 +17,7 @@ stateDiagram-v2
 
 ## Sprint 3 shipped subset
 
-Production currently ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, and result rendering. The implementation creates the attempt and its answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. A hosted pilot verified answer persistence across reload and a correct submitted result; the current smoke history is preserved. History listing, wrong-answer review, Exams, Writing, and Speaking flows described later in this document remain planned rather than shipped.
+Production ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, result breakdowns, snapshot-based History, and wrong-answer Review. The implementation creates the attempt and its answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. History and Review never join live question content for their historical wording or answers. Exams, Writing, and Speaking flows described later in this document remain unopened.
 
 ## Start
 

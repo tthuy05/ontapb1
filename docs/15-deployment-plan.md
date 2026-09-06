@@ -188,6 +188,12 @@ Sprint 3 was deployed on 6 September 2026 to `https://hoctienganh.site.je/` and 
 - The uploaded release is `release-20260906-225150.zip`, SHA-256 `5A97E82CC2F43C2909DE238ADF1E0259176C3B844953E72DA9BB149572DD3606`. The archive had no `.env` and no runtime data; File Manager extraction preserved the existing production `.env` and `storage`.
 - Local and hosted Sprint 0–3 checks passed as recorded in [Document 11](11-testing-plan.md). InfinityFree edge blocking of direct `/health` and protected source-path requests was documented; the same-origin health response passed without disclosure. No Sprint 4 work was started.
 
+## Sprint 4 production update
+
+Sprint 4 is an application-only release. It adds result breakdowns, snapshot-stable History, wrong-answer Review, and dashboard practice summaries while reusing the existing Sprint 3 `attempts` and `attempt_answers` tables. The reviewed [Sprint 4 SQL](../database/infinityfree/sprint-4-update.sql) contains comments only: there are no executable schema/data statements, so no production SQL import or migration-row change is required. Production remains at exactly 18 tables and 17 unique migration rows, and all Sprint 0–2 content/progress remains unchanged.
+
+The Sprint 4 release archive is uploaded only after a fresh read-only production audit confirms the Sprint 3 baseline, and it preserves the existing untracked `.env` and runtime `storage`. Hosted verification covers History/Review/result breakdowns, owner protection, snapshot behavior, responsive layout, and Sprint 0–3 regression paths. Sprint 5 remains unopened.
+
 ## Fallback: Render Free + Neon Free
 
 Keep this path documented but inactive. Render Free requires a Docker PHP runtime, has an ephemeral filesystem and cold starts, and its own documentation says Free instances should not be used for production. Neon Free changes the production engine to PostgreSQL and has its own compute, storage, restore-history, and network quotas. Activation requires an explicit owner decision, a PostgreSQL compatibility pass, a restore rehearsal, and a separate deployment review. Do not create Render, Neon, Docker, or paid resources for Sprint 0 while InfinityFree remains viable.

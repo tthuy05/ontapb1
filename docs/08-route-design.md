@@ -9,7 +9,7 @@
 - `POST` creates or starts, `PUT` replaces a saved answer, `PATCH` changes part of a resource/state, and `DELETE` is used only when the deletion policy permits it.
 - State-changing requests require CSRF. JSON save endpoints return validation errors and the server save version/time.
 
-## Sprint 3 shipped route subset
+## Sprint 4 shipped route subset
 
 The deployed route inventory includes the following new learner flow; the other future routes in this design remain unimplemented until their approved sprints.
 
@@ -23,7 +23,7 @@ The deployed route inventory includes the following new learner flow; the other 
 | POST | `/attempts/{attempt}/submit` | `attempts.submit` | Finalize and score the attempt |
 | GET | `/attempts/{attempt}/result` | `attempts.result` | Render the practice result |
 
-`/history`, `/review`, `/exams`, `/writing`, and `/speaking` are documented roadmap routes, not Sprint 3 production routes. The shipped owner route is `/manage/exercises` plus its create/show/edit/preview/status actions; no production content-management mutation was needed during verification.
+The shipped owner routes include `/history`, `/review/wrong-answers`, and snapshot-based wrong-answer detail, alongside `/manage/exercises` and its create/show/edit/preview/status actions. Exams, Writing, and Speaking remain roadmap routes.
 
 ## Public and session routes
 

@@ -12,9 +12,9 @@ Design priorities:
 4. honest separation between practice feedback and official VSTEP scoring;
 5. compact management pages suitable for one owner.
 
-## Sprint 3 shipped UI
+## Sprint 4 shipped UI
 
-The deployed Sprint 3 pages are the Practice catalog, exercise detail/start page, attempt page, result page, and Manage Exercise list/create/show/edit/preview views. The hosted pilot displayed the prompt and choices without the answer key, showed the save/timer state, and revealed correctness/explanation only on the submitted result. The pages passed the hosted desktop and 360px responsive overflow check. History, wrong-answer review, Exam, Writing, and Speaking page rows below remain the approved future design, not shipped Sprint 3 features.
+The deployed Sprint 3 pages remain the Practice catalog, exercise detail/start page, attempt page, result page, and Manage Exercise views. Sprint 4 adds the result breakdown, dashboard recent-practice/review summary, History filters, and snapshot-based wrong-answer Review. The take page still withholds correctness and explanations; History and Review use stored snapshots. Exam, Writing, and Speaking page rows below remain unopened.
 
 ## Shared shell
 

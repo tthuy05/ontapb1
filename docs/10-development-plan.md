@@ -89,7 +89,7 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - [x] Nine approved assessment tables and nine migration records were imported once through phpMyAdmin without changing Sprint 0–2 tables or data.
 - [x] Exercise/Attempt/Result controllers, Requests, scoring, Blade pages, autosave, timer, and owner Manage Exercise workflow were released to InfinityFree.
 - [x] The original Reading pilot exercise references the existing `topics.id=4` (`reading-daily-plans`) and `questions.id=1`; prompt/exam dependency tables remain empty.
-- [x] Local full tests, focused migration tests, syntax/style/build gates, and hosted Sprint 0–2 regression plus Sprint 3 smoke checks passed. Sprint 4 remains unopened.
+- [x] Local full tests, focused migration tests, syntax/style/build gates, and hosted Sprint 0–2 regression plus Sprint 3 smoke checks passed.
 
 ## Sprint 4 — scoring, history, and wrong-answer review
 
@@ -103,6 +103,12 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - Deployment: migrate indexes if measurements justify them; smoke-test historical pages.
 - Risks: UI could misrepresent practice percentage as official VSTEP score.
 - Definition of done: every objective result is reproducible from its snapshots and carries an explicit non-official label.
+
+### Sprint 4 completion record — 7 September 2026
+
+- [x] Result breakdowns, snapshot-stable history filters, wrong-answer review, and dashboard practice summaries are implemented without new schema.
+- [x] Local focused/full tests, PHP lint, Pint, Composer checks, Vite build, pnpm audit, Blade cache, route inventory, and disposable migration/seed checks passed.
+- [x] Hosted Sprint 4 smoke checks and Sprint 0–3 regression checks passed; no Sprint 5 work was started.
 
 ## Sprint 5 — mock-exam composition and flow
 

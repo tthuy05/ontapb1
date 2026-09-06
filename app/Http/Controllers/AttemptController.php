@@ -270,6 +270,8 @@ class AttemptController extends Controller
     {
         return [
             'snapshot_version' => 1,
+            'topic_id' => $question->topic_id,
+            'topic_name' => $question->topic?->name,
             'type' => $question->type,
             'skill' => $question->skill,
             'difficulty' => $question->difficulty,

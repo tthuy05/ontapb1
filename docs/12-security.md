@@ -43,6 +43,10 @@ Use `404` where object disclosure would be unnecessary. Do not rely on hidden li
 - Blade escaped output is the default. If grammar/passage rich text is required, use a narrowly configured HTML sanitizer and store/preview its allowed subset.
 - Markdown rendering, if later approved, must disable raw HTML and unsafe URLs.
 - Do not place answer keys/explanations in take-page markup, data attributes, JavaScript bundles, or pre-submit/save JSON.
+
+## Sprint 4 review safety
+
+History and wrong-answer Review are owner-protected. Review eligibility requires a submitted attempt and `is_correct=false`; detail pages use the immutable question/context snapshots rather than live question joins. Blade escaping remains enabled for prompts, options, context, and explanations. Sprint 4 adds no credentials, files, database tables, or destructive operations.
 - Production disables debug output and detailed exception pages. Log a request ID, not secrets or full candidate responses.
 - Set baseline headers: HSTS after HTTPS is stable, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, a restrictive `Permissions-Policy` with microphone allowed only for self, and a practical Content Security Policy tested with Laravel/Bootstrap assets.
 

@@ -29,6 +29,10 @@ Sprint 3 created the nine-table assessment dependency block exactly in the docum
 
 Production retained the Sprint 0–2 counts: 5 topics, 3 vocabularies, 1 vocabulary-progress row, 1 grammar lesson, 1 passage, 1 listening record, 2 questions, and 5 question options. Sprint 3 added one active exercise and one exercise-question mapping. The Writing/Speaking/Exam dependency tables and their child tables are empty. The three `attempts` and three `attempt_answers` rows currently present are append-only hosted smoke-test history; they did not modify the content or vocabulary data.
 
+## Sprint 4 implementation and production status
+
+Sprint 4 adds no tables, columns, indexes, foreign keys, pilot content, or migration rows. Result breakdowns, History, and wrong-answer Review read the existing `attempts`, `attempt_answers`, and immutable JSON snapshots. The forward-only [Sprint 4 SQL](../database/infinityfree/sprint-4-update.sql) is intentionally comment-only, so no production SQL import is required.
+
 ## Tables
 
 ### `topics`

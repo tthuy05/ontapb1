@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\OwnerSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GrammarController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ListeningController;
 use App\Http\Controllers\Manage\DashboardController as ManageDashboardController;
 use App\Http\Controllers\Manage\ExerciseController as ManageExerciseController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Manage\VocabularyController as ManageVocabularyControll
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ReadingController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\VocabularyController;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -66,6 +68,9 @@ Route::middleware('owner')->group(function (): void {
         ->name('attempts.answers.update');
     Route::post('/attempts/{attempt}/submit', [AttemptController::class, 'submit'])->name('attempts.submit');
     Route::get('/attempts/{attempt}/result', [ResultController::class, 'show'])->name('attempts.result');
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+    Route::get('/review/wrong-answers', [ReviewController::class, 'index'])->name('review.wrong.index');
+    Route::get('/review/wrong-answers/{attemptAnswer}', [ReviewController::class, 'show'])->name('review.wrong.show');
 
     Route::prefix('manage')->name('manage.')->group(function (): void {
         Route::get('/', ManageDashboardController::class)->name('dashboard');

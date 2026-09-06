@@ -22,6 +22,33 @@
         <div class="col-6 col-lg-3"><div class="card h-100"><div class="card-body"><span class="text-body-secondary d-block">Completed</span><strong class="h3">{{ ucfirst($attempt->completion_reason ?? 'manual') }}</strong></div></div></div>
     </div>
 
+    <section class="card mb-4" aria-labelledby="breakdown-heading">
+        <div class="card-body p-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+                <div>
+                    <h2 class="h4 mb-1" id="breakdown-heading">Result breakdown</h2>
+                    <p class="text-body-secondary mb-0">Calculated from the submitted answer snapshots.</p>
+                </div>
+                @if ($attempt->incorrect_count > 0)
+                    <a class="btn btn-outline-danger align-self-start" href="{{ route('review.wrong.index', ['attempt' => $attempt->id]) }}">Review wrong answers</a>
+                @endif
+            </div>
+            @foreach ($breakdowns as $dimension => $groups)
+                <h3 class="h6 text-capitalize mt-3">By {{ $dimension }}</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th scope="col">{{ ucfirst($dimension) }}</th><th scope="col">Questions</th><th scope="col">Correct</th><th scope="col">Incorrect</th><th scope="col">Unanswered</th><th scope="col">Score</th><th scope="col">Rate</th></tr></thead>
+                        <tbody>
+                            @foreach ($groups as $group)
+                                <tr><th scope="row">{{ $group['name'] }}</th><td>{{ $group['questions'] }}</td><td>{{ $group['correct'] }}</td><td>{{ $group['incorrect'] }}</td><td>{{ $group['unanswered'] }}</td><td>{{ $group['points_awarded'] }} / {{ $group['max_points'] }}</td><td>{{ $group['percentage'] }}%</td></tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
     <div class="vstack gap-4">
         @foreach ($items as $item)
             <article class="card">
@@ -70,5 +97,6 @@
     <div class="d-flex flex-wrap gap-2 mt-4">
         <a class="btn btn-primary" href="{{ route('practice.show', $attempt->exercise) }}">Try again</a>
         <a class="btn btn-outline-secondary" href="{{ route('practice.index') }}">Back to practice</a>
+        <a class="btn btn-outline-secondary" href="{{ route('history.index') }}">View history</a>
     </div>
 @endsection

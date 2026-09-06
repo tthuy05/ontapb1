@@ -1,0 +1,3 @@
+-- Sprint 4 is application-only: it adds no tables, columns, indexes, or migration rows.
+-- History and wrong-answer review derive from the existing Sprint 3 attempts tables.
+-- After live-schema verification, no production SQL import is required for Sprint 4.

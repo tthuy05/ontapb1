@@ -22,6 +22,11 @@ class ResultController extends Controller
         return view('results.show', [
             'attempt' => $attempt,
             'items' => $attempt->answers->map(fn (AttemptAnswer $answer): array => $this->resultItem($answer))->all(),
+            'breakdowns' => [
+                'skill' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'skill', 'Not recorded')),
+                'topic' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'topic_name', 'Not recorded')),
+                'type' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'type', 'Not recorded')),
+            ],
         ]);
     }
 
@@ -34,6 +39,10 @@ class ResultController extends Controller
 
         return [
             'position' => $answer->question_position,
+            'answerId' => $answer->id,
+            'skill' => $snapshot['skill'] ?? null,
+            'topic' => $snapshot['topic_name'] ?? null,
+            'type' => $snapshot['type'] ?? null,
             'prompt' => $snapshot['prompt'] ?? '',
             'options' => $options->all(),
             'response' => data_get($answer->response, 'value'),
@@ -44,5 +53,24 @@ class ResultController extends Controller
             'pointsAwarded' => $answer->points_awarded,
             'maxPoints' => $answer->max_points,
         ];
+    }
+
+    private function breakdown($answers, callable $label): array
+    {
+        return $answers->groupBy($label)->map(function ($items, $name): array {
+            $max = (float) $items->sum(fn (AttemptAnswer $answer): float => (float) $answer->max_points);
+            $awarded = (float) $items->sum(fn (AttemptAnswer $answer): float => (float) $answer->points_awarded);
+
+            return [
+                'name' => $name,
+                'questions' => $items->count(),
+                'correct' => $items->where('is_correct', true)->count(),
+                'incorrect' => $items->where('is_correct', false)->count(),
+                'unanswered' => $items->whereNull('is_correct')->count(),
+                'points_awarded' => number_format($awarded, 2, '.', ''),
+                'max_points' => number_format($max, 2, '.', ''),
+                'percentage' => $max > 0 ? number_format(($awarded / $max) * 100, 2, '.', '') : '0.00',
+            ];
+        })->values()->all();
     }
 }

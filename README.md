@@ -2,7 +2,7 @@
 
 Private, single-owner VSTEP Level 3 / B1 study application built with Laravel 13, PHP 8.3+, Blade, Bootstrap, and MariaDB/MySQL.
 
-Sprint 3 extends the Sprint 0–2 foundation with the first complete practice vertical: reusable Exercises, immutable attempt snapshots, versioned answer saves, server-side scoring, result pages, and owner-managed exercise composition. The reviewed Sprint 3 dependency block also creates the empty Writing, Speaking, and Exam composition tables needed by later verticals. There is still no registration, `users` table, role system, or Sprint 4+ history/review, exam, Writing, or Speaking workflow.
+Sprint 4 extends the Sprint 0–3 foundation with trustworthy objective-practice feedback: raw result breakdowns, snapshot-stable attempt history, filters, and wrong-answer review. There is still no registration, `users` table, role system, or Sprint 5+ exam, Writing, or Speaking workflow.
 
 ## Local setup
 
@@ -37,7 +37,7 @@ php artisan db:seed --force
 php artisan serve
 ```
 
-The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question.
+The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question. Sprint 4 is application-only and adds no schema or production content.
 
 ## Checks
 
@@ -84,8 +84,8 @@ InfinityFree Free has a fixed `htdocs` web root and no server-side SSH, Composer
 1. Run `scripts/build-infinityfree-release.ps1` locally. It installs production-only Composer dependencies and builds `public/build`; it never includes `.env`, `node_modules`, local SQLite, logs, caches, tests, source-control metadata, or development packages.
 2. Upload the release contents into the site's `htdocs` directory. The outer `deploy/infinityfree/htdocs.htaccess` file protects Laravel internals and rewrites requests into `public`; keep Laravel's standard `public/.htaccess`.
 3. Create the production `.env` manually in `htdocs` with the direct HTTPS subdomain and panel-provided MySQL values. Use file sessions/cache and secure cookies; never put secrets in Git or logs.
-4. For a new database only, import `database/infinityfree/sprint-0-schema.sql`. For an existing installation, review the next forward-only SQL batch against the live schema before importing it once: Sprint 2 uses `database/infinityfree/sprint-2-update.sql`; Sprint 3 uses `database/infinityfree/sprint-3-update.sql`. Sprint 3 adds nine assessment tables, records nine migration rows, and inserts one original exercise mapped to the existing Reading question; it does not alter or delete Sprint 0–2 data.
-5. Verify the panel's PHP 8.3 and `pdo_mysql`, HTTPS, redirect/security headers, owner login, dashboard, Topics Manage flow, Vocabulary learner/Manage/progress flow, Grammar learner/Manage flow, Reading/Listening, Practice start/save/submit/result, logout, `GET /health`, and denial of `.env`/source/vendor/storage paths.
+4. For a new database only, import `database/infinityfree/sprint-0-schema.sql`. For an existing installation, review each forward-only SQL batch against the live schema before importing it once: Sprint 2 uses `database/infinityfree/sprint-2-update.sql`; Sprint 3 uses `database/infinityfree/sprint-3-update.sql`. Sprint 4 uses `database/infinityfree/sprint-4-update.sql`, which is deliberately comment-only because history/review use existing tables. Sprint 3 does not alter or delete Sprint 0–2 data.
+5. Verify the panel's PHP 8.3 and `pdo_mysql`, HTTPS, redirect/security headers, owner login, dashboard, Topics Manage flow, Vocabulary learner/Manage/progress flow, Grammar learner/Manage flow, Reading/Listening, Practice start/save/submit/result, History, wrong-answer Review, logout, `GET /health`, and denial of `.env`/source/vendor/storage paths.
 6. Upload each reviewed release over application files while preserving the existing `.env`, `storage`, and database. Never upload the local `.env` or replace runtime storage.
 
 The full workflow, SQL import method, future forward-only schema strategy, persistence behavior, and rollback procedure are in [docs/15-deployment-plan.md](docs/15-deployment-plan.md). Render + Neon remains an inactive fallback requiring separate approval.

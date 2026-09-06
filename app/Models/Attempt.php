@@ -64,4 +64,14 @@ class Attempt extends Model
     {
         return $query->where('status', 'submitted');
     }
+
+    public function getSnapshotTitleAttribute(): string
+    {
+        return (string) data_get($this->configuration_snapshot, 'title', $this->exercise?->title ?? 'Practice attempt');
+    }
+
+    public function getSnapshotSkillAttribute(): ?string
+    {
+        return data_get($this->configuration_snapshot, 'skill', $this->exercise?->skill);
+    }
 }

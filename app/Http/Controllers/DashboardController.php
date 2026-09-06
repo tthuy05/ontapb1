@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attempt;
+use App\Models\AttemptAnswer;
 use App\Models\GrammarLesson;
 use App\Models\Vocabulary;
 use App\Models\VocabularyProgress;
@@ -39,6 +41,15 @@ class DashboardController extends Controller
                 'learned' => (int) $progressCounts->get('learned', 0),
                 'review' => (int) $progressCounts->get('review', 0),
             ],
+            'recentAttempts' => Attempt::query()
+                ->with('exercise')
+                ->latest('started_at')
+                ->limit(5)
+                ->get(),
+            'wrongAnswerCount' => AttemptAnswer::query()
+                ->where('is_correct', false)
+                ->whereHas('attempt', fn ($query) => $query->where('status', 'submitted'))
+                ->count(),
         ]);
     }
 }

@@ -8,6 +8,10 @@ The question engine handles automatically scoreable, reusable objective items. W
 
 The deployed Sprint 3 engine implements the MVP `single_choice`/`true_false` path for Exercises. Starting an exercise snapshots the prompt, option text/keys, correct key, explanation, source context, order, and points into pre-created `attempt_answers`; the take page omits correctness and explanations. Answer saves validate against that snapshot with optimistic `save_version`, and submission scores on the server from the stored snapshot. The hosted pilot successfully saved, survived reload, submitted, and rendered a 100% result with feedback revealed only after submission. Multiple choice, fill-blank, Writing, Speaking, and Exam scoring remain future scope.
 
+## Sprint 4 shipped behavior
+
+Result pages group raw points, counts, and percentages by snapshotted skill, topic, and question type. History filters by snapshotted title, skill, and status. Wrong-answer Review derives only submitted incorrect objective answers and renders their stored prompt, options, context, response, correct key, and explanation; live edits cannot change historical feedback. Practice percentages remain explicitly non-official.
+
 ## Type roadmap
 
 | Type | Response | Scoring | Release |

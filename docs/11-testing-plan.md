@@ -136,6 +136,10 @@ Local gates passed: PHPUnit `65 tests, 423 assertions`; disposable SQLite `migra
 
 Hosted checks passed on `https://hoctienganh.site.je/`: dashboard and all Sprint 0–2 learner/manage GET regressions, Practice catalog/detail, active exercise filtering and empty state, attempt start/save/reload/submit/result, answer-key withholding before submit, invalid-resource 404s, owner-protected routes, security headers, and the 360px no-horizontal-overflow check. The existing Draft Listening record correctly remains absent from the public Listening library. The hosted `/health` endpoint returned HTTP 200 and exactly `{"status":"ok"}` through a same-origin request; direct navigation was blocked by the provider edge. Protected source-path fetches were likewise blocked by the edge and disclosed no content. No new content-management writes were used for verification.
 
+## Sprint 4 verification record — 7 September 2026
+
+Local Sprint 4 tests cover owner protection, snapshot-stable history, status/search/skill filters, result skill/topic/type breakdowns, submitted-incorrect-only review, snapshot-stable review detail, and dashboard review summaries. The full suite passed with 71 tests and 472 assertions. No schema migration is required for Sprint 4.
+
 ## Out-of-scope testing in MVP
 
 Large multi-user load, distributed concurrency, native mobile devices as an exhaustive lab, AI scoring accuracy, cloud audio upload/transcoding, and payment workflows are not MVP test areas because those features are not in scope.
