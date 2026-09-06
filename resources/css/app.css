@@ -1,0 +1,47 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+:root {
+    color-scheme: light;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    border: 1px solid rgba(13, 110, 253, 0.15);
+}
+
+.summary-card,
+.manage-card {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.summary-card:hover,
+.summary-card:focus-visible,
+.manage-card:hover,
+.manage-card:focus-visible {
+    border-color: rgba(13, 110, 253, 0.5);
+    box-shadow: 0 0.25rem 1rem rgba(13, 110, 253, 0.1);
+}
+
+.example-panel {
+    background: #f3f7fc;
+    border-left: 0.25rem solid #0d6efd;
+}
+
+.preserve-lines {
+    white-space: pre-line;
+}
+
+.table-actions {
+    min-width: 13rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .summary-card,
+    .manage-card {
+        transition: none;
+    }
+}

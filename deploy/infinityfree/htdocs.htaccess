@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # The free plan has a fixed htdocs web root. Keep Laravel internals behind
+    # the public front controller, even though they must live inside htdocs.
+    RewriteRule ^(?:app|bootstrap|config|database|resources|routes|storage|vendor)(?:/|$) - [F,L]
+    RewriteRule ^(?:\.env(?:\..*)?|artisan|composer\.(?:json|lock)|package\.json|pnpm-lock\.yaml|phpunit\.xml|vite\.config\.js)(?:/|$) - [F,L]
+
+    # Laravel's public disk is not used through Sprint 1. Do not expose runtime
+    # storage until a future upload design adds an explicit, reviewed route.
+    RewriteRule ^storage(?:/|$) - [F,L]
+
+    # Send all other requests through the normal Laravel public directory.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>

@@ -1,0 +1,11 @@
+@extends('layouts.app')
+
+@section('title', $listeningContent->title.' · Listening')
+
+@section('content')
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="{{ route('listening.index') }}">Listening</a></li><li class="breadcrumb-item active" aria-current="page">{{ $listeningContent->title }}</li></ol></nav>
+    <div class="mb-4"><p class="text-primary fw-semibold mb-1">Listening item</p><h1 class="h2 mb-1">{{ $listeningContent->title }}</h1><p class="text-body-secondary mb-0">B1 · {{ $listeningContent->duration_seconds ? $listeningContent->duration_seconds.' seconds' : 'duration not set' }}@if ($listeningContent->topic) · {{ $listeningContent->topic->name }}@endif</p></div>
+    <div class="card mb-4"><div class="card-body p-4"><h2 class="h5">Audio</h2><audio class="w-100" controls preload="metadata" src="{{ asset($listeningContent->audio_path) }}">Your browser does not support embedded audio.</audio><p class="small text-body-secondary mt-2 mb-0">Audio path: {{ $listeningContent->audio_path }}</p></div></div>
+    <details class="card mb-4"><summary class="card-header py-3">Reveal transcript for study review</summary><div class="card-body preserve-lines">{{ $listeningContent->transcript }}</div></details>
+    <section aria-labelledby="questions-heading"><div class="d-flex justify-content-between align-items-center gap-3 mb-3"><h2 class="h4 mb-0" id="questions-heading">Study questions</h2><span class="small text-body-secondary">Answer keys stay hidden until a practice attempt.</span></div>@forelse ($listeningContent->questions as $question)<article class="card mb-3"><div class="card-body"><h3 class="h5">{{ $loop->iteration }}. {{ $question->prompt }}</h3><fieldset class="mb-0"><legend class="visually-hidden">Options for question {{ $loop->iteration }}</legend>@foreach ($question->options as $option)<div class="form-check"><input class="form-check-input" type="radio" disabled id="listening-question-{{ $question->id }}-{{ $option->option_key }}"><label class="form-check-label" for="listening-question-{{ $question->id }}-{{ $option->option_key }}">{{ $option->option_key }}. {{ $option->content }}</label></div>@endforeach</fieldset></div></article>@empty<div class="card card-body"><p class="mb-0 text-body-secondary">No active questions are linked yet.</p></div>@endforelse</section>
+@endsection

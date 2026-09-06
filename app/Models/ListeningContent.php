@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class ListeningContent extends Model
+{
+    use HasFactory;
+
+    public const SOURCE_TYPES = Vocabulary::SOURCE_TYPES;
+
+    public const STATUSES = Topic::STATUSES;
+
+    public const DIFFICULTIES = [1, 2, 3];
+
+    public const AUDIO_MIMES = ['audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/mp4', 'audio/x-m4a'];
+
+    protected $fillable = [
+        'topic_id', 'title', 'transcript', 'audio_path', 'audio_mime', 'audio_size_bytes',
+        'duration_seconds', 'speaker_count', 'accent_notes', 'cefr_level', 'difficulty',
+        'source_type', 'source_reference', 'license_name', 'license_url', 'source_notes', 'status',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'audio_size_bytes' => 'integer',
+            'duration_seconds' => 'integer',
+            'speaker_count' => 'integer',
+            'difficulty' => 'integer',
+        ];
+    }
+
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
+    }
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 'active');
+    }
+}

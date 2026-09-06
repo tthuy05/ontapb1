@@ -1,0 +1,7 @@
+@extends('layouts.app')
+@section('title', 'Edit '.$vocabulary->term.' · Manage')
+@section('content')
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="{{ route('manage.vocabulary.index') }}">Vocabulary</a></li><li class="breadcrumb-item active" aria-current="page">Edit</li></ol></nav><div class="d-flex justify-content-between gap-3 mb-4"><h1 class="h2 mb-0">Edit {{ $vocabulary->term }}</h1>@include('partials.status-badge', ['status' => $vocabulary->status])</div>
+    @include('manage.vocabulary._form')
+    <div class="card border-danger mt-5"><div class="card-body"><h2 class="h5">Delete unused draft</h2><p class="text-body-secondary">Entries with learner progress or a published status are preserved. Deactivate them instead.</p><form method="POST" action="{{ route('manage.vocabulary.destroy', $vocabulary) }}">@csrf @method('DELETE')<div class="form-check mb-3"><input class="form-check-input" id="confirm_delete" name="confirm_delete" type="checkbox" value="1" required><label class="form-check-label" for="confirm_delete">I understand this permanently deletes this unused draft.</label></div><button class="btn btn-outline-danger" type="submit">Delete unused draft</button></form></div></div>
+@endsection
