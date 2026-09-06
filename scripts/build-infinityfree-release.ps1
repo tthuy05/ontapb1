@@ -49,33 +49,17 @@ $releaseName = 'release-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
 $releaseRoot = Join-Path $OutputDirectory $releaseName
 New-Item -ItemType Directory -Path $releaseRoot -Force | Out-Null
 
-$directories = @('app', 'bootstrap', 'config', 'database', 'public', 'resources', 'routes', 'storage', 'vendor')
+$directories = @('app', 'bootstrap', 'config', 'database', 'public', 'resources', 'routes', 'vendor')
 foreach ($directory in $directories) {
     Copy-Item -LiteralPath (Join-Path $projectRoot $directory) -Destination $releaseRoot -Recurse -Force
 }
 
-# Never ship local state or a local database. Recreate safe placeholders so ZIP
-# extraction and FTP uploads preserve Laravel's required writable directories.
-$runtimeDirectories = @(
-    (Join-Path $releaseRoot 'storage\logs'),
-    (Join-Path $releaseRoot 'storage\framework\cache\data'),
-    (Join-Path $releaseRoot 'storage\framework\sessions'),
-    (Join-Path $releaseRoot 'storage\framework\testing'),
-    (Join-Path $releaseRoot 'storage\framework\views')
-)
-$runtimeState = @(
-    (Join-Path $releaseRoot 'database\database.sqlite')
-) + $runtimeDirectories
-foreach ($path in $runtimeState) {
-    if (Test-Path -LiteralPath $path -PathType Leaf) {
-        Remove-Item -LiteralPath $path -Force
-    } elseif (Test-Path -LiteralPath $path -PathType Container) {
-        Get-ChildItem -LiteralPath $path -Recurse -Force -File | Remove-Item -Force
-    }
-}
-foreach ($directory in $runtimeDirectories) {
-    New-Item -ItemType Directory -Path $directory -Force | Out-Null
-    @('*', '!.gitignore') | Set-Content -LiteralPath (Join-Path $directory '.gitignore') -Encoding utf8
+# Production already owns its writable runtime storage. Omitting it from the
+# release makes both ZIP extraction and FTP deployment preserve that state.
+$databaseStateFiles = Get-ChildItem -LiteralPath (Join-Path $releaseRoot 'database') -Recurse -Force -File |
+    Where-Object { $_.Extension -in @('.db', '.log', '.sqlite', '.sqlite3') }
+foreach ($file in $databaseStateFiles) {
+    Remove-Item -LiteralPath $file.FullName -Force
 }
 
 # Composer can leave stale development bin shims after an interrupted install;
@@ -152,7 +136,7 @@ $manifest = [ordered]@{
     document_root = 'htdocs'
     environment_file = 'Create manually in htdocs; never upload local .env'
     database_bootstrap = 'database/infinityfree/sprint-0-schema.sql for a new database only'
-    database_update = 'database/infinityfree/sprint-4-update.sql; no executable SQL or production import required'
+    database_update = 'Sprint 5: no schema change and no production SQL import required'
     excluded = @('.env', 'node_modules', 'tests', 'logs', 'local database files', 'source-control metadata', 'dev Composer packages')
 }
 $manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $releaseRoot 'DEPLOYMENT-MANIFEST.json') -Encoding utf8

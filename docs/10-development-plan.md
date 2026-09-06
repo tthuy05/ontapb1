@@ -123,6 +123,16 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - Risks: official format assumptions, long sessions, incomplete bank.
 - Definition of done: one full configurable mock can be completed, while its raw result is not presented as official band conversion.
 
+### Sprint 5 implementation record — 7 September 2026
+
+- [x] Added owner composition for ordered objective Reading/Listening sections and items using the existing Sprint 3 exam tables.
+- [x] Added activation validation for contiguous positions, one objective question per item, matching skills, active dependencies, valid options, and time limits.
+- [x] Added immutable exam configuration/question/context snapshots, section navigation, overall deadline handling, raw section/skill/topic/type result breakdowns, and non-official scoring labels.
+- [x] Added the `B1 objective mock pilot` local seeder using the existing Sprint 2 Reading question; Listening remains available for future reviewed active content.
+- [x] Added a reusable local-only encrypted-credential FTP listing/deployment workflow. It protects the production `.env` and `storage` paths and never deletes remote files.
+- [x] No Sprint 5 migration or production SQL import is required: the `exams`, `exam_sections`, and `exam_section_items` tables already exist from Sprint 3.
+- [x] Hosted deployment and final smoke/regression results are recorded in `docs/17-sprint-5-final-report.md`: production remains at 18 tables/17 migrations, the pilot completed successfully at 100%, the existing `.env`/`storage` were preserved, and Sprint 0–4 routes passed regression checks.
+
 ## Sprint 6 — Writing practice
 
 **Goal:** save and review B1/VSTEP-aligned written practice.

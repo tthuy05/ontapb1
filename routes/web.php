@@ -3,12 +3,14 @@
 use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\Auth\OwnerSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\GrammarController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ListeningController;
 use App\Http\Controllers\Manage\DashboardController as ManageDashboardController;
 use App\Http\Controllers\Manage\ExerciseController as ManageExerciseController;
+use App\Http\Controllers\Manage\ExamController as ManageExamController;
 use App\Http\Controllers\Manage\GrammarLessonController as ManageGrammarLessonController;
 use App\Http\Controllers\Manage\ListeningContentController as ManageListeningContentController;
 use App\Http\Controllers\Manage\PassageController as ManagePassageController;
@@ -64,6 +66,9 @@ Route::middleware('owner')->group(function (): void {
     Route::post('/practice/{exercise}/attempts', [AttemptController::class, 'storeForExercise'])
         ->name('practice.attempts.store');
     Route::get('/attempts/{attempt}', [AttemptController::class, 'show'])->name('attempts.show');
+    Route::get('/attempts/{attempt}/sections/{sectionPosition}', [AttemptController::class, 'showSection'])
+        ->whereNumber('sectionPosition')
+        ->name('attempts.sections.show');
     Route::put('/attempts/{attempt}/answers/{attemptAnswer}', [AttemptController::class, 'updateAnswer'])
         ->name('attempts.answers.update');
     Route::post('/attempts/{attempt}/submit', [AttemptController::class, 'submit'])->name('attempts.submit');
@@ -71,6 +76,11 @@ Route::middleware('owner')->group(function (): void {
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
     Route::get('/review/wrong-answers', [ReviewController::class, 'index'])->name('review.wrong.index');
     Route::get('/review/wrong-answers/{attemptAnswer}', [ReviewController::class, 'show'])->name('review.wrong.show');
+
+    Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
+    Route::get('/exams/{exam}', [ExamController::class, 'show'])->name('exams.show');
+    Route::post('/exams/{exam}/attempts', [AttemptController::class, 'storeForExam'])
+        ->name('exams.attempts.store');
 
     Route::prefix('manage')->name('manage.')->group(function (): void {
         Route::get('/', ManageDashboardController::class)->name('dashboard');
@@ -107,6 +117,14 @@ Route::middleware('owner')->group(function (): void {
         Route::get('/exercises/{exercise}/preview', [ManageExerciseController::class, 'preview'])
             ->name('exercises.preview');
         Route::resource('exercises', ManageExerciseController::class);
+
+        Route::patch('/exams/{exam}/status', [ManageExamController::class, 'updateStatus'])
+            ->name('exams.status.update');
+        Route::get('/exams/{exam}/preview', [ManageExamController::class, 'preview'])
+            ->name('exams.preview');
+        Route::patch('/exams/{exam}/items/order', [ManageExamController::class, 'updateOrder'])
+            ->name('exams.items.order.update');
+        Route::resource('exams', ManageExamController::class);
     });
 
     Route::post('/logout', [OwnerSessionController::class, 'destroy'])->name('logout');

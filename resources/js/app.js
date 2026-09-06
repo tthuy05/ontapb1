@@ -9,7 +9,7 @@ const formatSavedAt = (value) => {
     return Number.isNaN(date.getTime()) ? '' : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+const initializeAttemptPage = () => {
     const page = document.querySelector('[data-attempt-page]');
     if (!page) {
         return;
@@ -138,4 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAttemptPage, { once: true });
+} else {
+    initializeAttemptPage();
+}

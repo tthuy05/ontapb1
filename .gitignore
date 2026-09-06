@@ -21,6 +21,8 @@
 /public/hot
 /public/storage
 /dist
+.infinityfree-ftp.json
+.infinityfree-ftp.*.json
 /storage/*.key
 /storage/pail
 /vendor

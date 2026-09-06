@@ -11,26 +11,35 @@ class ResultController extends Controller
 {
     public function show(Attempt $attempt): View|RedirectResponse
     {
-        abort_unless($attempt->exercise_id !== null && $attempt->exam_id === null, 404);
+        abort_unless(
+            ($attempt->exercise_id !== null && $attempt->exam_id === null)
+                || ($attempt->exercise_id === null && $attempt->exam_id !== null),
+            404,
+        );
 
         if ($attempt->status !== 'submitted') {
             return redirect()->route('attempts.show', $attempt);
         }
 
-        $attempt->load(['exercise', 'answers']);
+        $attempt->load(['exercise', 'exam', 'answers']);
+
+        $breakdowns = [
+            'skill' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'skill', 'Not recorded')),
+            'topic' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'topic_name', 'Not recorded')),
+            'type' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'type', 'Not recorded')),
+        ];
+        if ($attempt->exam_id !== null) {
+            $breakdowns = ['section' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => $this->sectionName($attempt, $answer))] + $breakdowns;
+        }
 
         return view('results.show', [
             'attempt' => $attempt,
-            'items' => $attempt->answers->map(fn (AttemptAnswer $answer): array => $this->resultItem($answer))->all(),
-            'breakdowns' => [
-                'skill' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'skill', 'Not recorded')),
-                'topic' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'topic_name', 'Not recorded')),
-                'type' => $this->breakdown($attempt->answers, fn (AttemptAnswer $answer): string => (string) data_get($answer->question_snapshot, 'type', 'Not recorded')),
-            ],
+            'items' => $attempt->answers->map(fn (AttemptAnswer $answer): array => $this->resultItem($attempt, $answer))->all(),
+            'breakdowns' => $breakdowns,
         ]);
     }
 
-    private function resultItem(AttemptAnswer $answer): array
+    private function resultItem(Attempt $attempt, AttemptAnswer $answer): array
     {
         $snapshot = is_array($answer->question_snapshot) ? $answer->question_snapshot : [];
         $context = is_array($answer->context_snapshot) ? $answer->context_snapshot : null;
@@ -39,6 +48,7 @@ class ResultController extends Controller
 
         return [
             'position' => $answer->question_position,
+            'section' => $answer->section_position === null ? null : $this->sectionName($attempt, $answer),
             'answerId' => $answer->id,
             'skill' => $snapshot['skill'] ?? null,
             'topic' => $snapshot['topic_name'] ?? null,
@@ -73,4 +83,14 @@ class ResultController extends Controller
             ];
         })->values()->all();
     }
+
+    private function sectionName(Attempt $attempt, AttemptAnswer $answer): string
+    {
+        $section = collect(data_get($attempt->configuration_snapshot, 'sections', []))->first(
+            fn (array $section): bool => (int) ($section['position'] ?? -1) === (int) $answer->section_position,
+        );
+
+        return is_array($section) ? (string) ($section['title'] ?? 'Section '.((int) $answer->section_position + 1)) : 'Section '.((int) $answer->section_position + 1);
+    }
+
 }

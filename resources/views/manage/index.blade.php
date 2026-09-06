@@ -60,5 +60,10 @@
                 <div class="card-body p-4"><h2 class="h5 text-body">Exercises</h2><p class="text-body-secondary mb-0">Assemble reviewed questions into resumable, server-scored practice.</p><span class="small text-body-secondary">{{ $counts['exercises'] }} exercises</span></div>
             </a>
         </div>
+        <div class="col-12 col-md-4">
+            <a class="manage-card card h-100 text-decoration-none" href="{{ route('manage.exams.index') }}">
+                <div class="card-body p-4"><h2 class="h5 text-body">Mock exams</h2><p class="text-body-secondary mb-0">Compose ordered Reading/Listening simulations from reviewed questions.</p><span class="small text-body-secondary">{{ $counts['exams'] }} exams</span></div>
+            </a>
+        </div>
     </div>
 @endsection

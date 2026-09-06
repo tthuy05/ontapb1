@@ -7,7 +7,7 @@
         <div>
             <p class="text-primary fw-semibold mb-1">Practice feedback</p>
             <h1 class="h2 mb-1">Practice history</h1>
-            <p class="text-body-secondary mb-0">Review attempts using the exercise configuration captured when each attempt began.</p>
+            <p class="text-body-secondary mb-0">Review attempts using the configuration captured when each attempt began.</p>
         </div>
         <a class="btn btn-outline-primary" href="{{ route('review.wrong.index') }}">Wrong-answer review</a>
     </div>
@@ -24,7 +24,7 @@
     <div class="card">
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th scope="col">Exercise</th><th scope="col">Skill</th><th scope="col">Started</th><th scope="col">Status</th><th scope="col">Score</th><th scope="col" class="text-end">Action</th></tr></thead>
+                <thead><tr><th scope="col">Practice target</th><th scope="col">Skill</th><th scope="col">Started</th><th scope="col">Status</th><th scope="col">Score</th><th scope="col" class="text-end">Action</th></tr></thead>
                 <tbody>
                     @forelse ($attempts as $attempt)
                         <tr>

@@ -17,7 +17,7 @@ class ReviewController extends Controller
         $attemptId = $request->integer('attempt');
 
         $answers = AttemptAnswer::query()
-            ->with('attempt.exercise')
+            ->with(['attempt.exercise', 'attempt.exam'])
             ->where('is_correct', false)
             ->whereHas('attempt', fn ($query) => $query->where('status', 'submitted')->when($attemptId > 0, fn ($query) => $query->whereKey($attemptId)))
             ->when(in_array($skill, Exercise::SKILLS, true), fn ($query) => $query->where('question_snapshot->skill', $skill))

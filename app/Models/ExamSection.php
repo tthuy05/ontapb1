@@ -11,6 +11,8 @@ class ExamSection extends Model
 {
     use HasFactory;
 
+    public const NAVIGATION_MODES = ['free_within_section'];
+
     protected $fillable = [
         'exam_id', 'skill', 'title', 'instructions', 'position', 'time_limit_seconds', 'navigation_mode',
     ];
@@ -29,4 +31,5 @@ class ExamSection extends Model
     {
         return $this->hasMany(ExamSectionItem::class)->orderBy('position');
     }
+
 }

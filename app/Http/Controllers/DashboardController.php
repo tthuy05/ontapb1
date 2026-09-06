@@ -42,7 +42,7 @@ class DashboardController extends Controller
                 'review' => (int) $progressCounts->get('review', 0),
             ],
             'recentAttempts' => Attempt::query()
-                ->with('exercise')
+                ->with(['exercise', 'exam'])
                 ->latest('started_at')
                 ->limit(5)
                 ->get(),

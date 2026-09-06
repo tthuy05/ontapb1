@@ -6,9 +6,11 @@ use App\Http\Requests\AttemptAnswerRequest;
 use App\Http\Requests\AttemptSubmitRequest;
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
+use App\Models\Exam;
 use App\Models\Exercise;
 use App\Models\ExerciseQuestion;
 use App\Models\Question;
+use App\Services\ExamCompositionService;
 use App\Services\ScoringService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +20,10 @@ use Illuminate\View\View;
 
 class AttemptController extends Controller
 {
-    public function __construct(private readonly ScoringService $scoring) {}
+    public function __construct(
+        private readonly ScoringService $scoring,
+        private readonly ExamCompositionService $composition,
+    ) {}
 
     public function storeForExercise(Exercise $exercise): RedirectResponse
     {
@@ -62,9 +67,56 @@ class AttemptController extends Controller
         return redirect()->route('attempts.show', $attempt)->with('status', 'Practice attempt started.');
     }
 
+    public function storeForExam(Exam $exam): RedirectResponse
+    {
+        $this->composition->load($exam);
+        abort_unless($exam->status === 'active' && $this->composition->activationErrors($exam) === [], 404);
+
+        $startedAt = now();
+        $attempt = DB::transaction(function () use ($exam, $startedAt): Attempt {
+            $snapshot = $this->composition->snapshot($exam);
+            $attempt = Attempt::query()->create([
+                'exam_id' => $exam->id,
+                'status' => 'in_progress',
+                'started_at' => $startedAt,
+                'expires_at' => $exam->time_limit_seconds === null
+                    ? null
+                    : $startedAt->copy()->addSeconds($exam->time_limit_seconds),
+                'max_score' => $exam->sections->sum(
+                    fn (\App\Models\ExamSection $section): float => (float) $section->items->sum(
+                        fn ($item): float => (float) $item->points,
+                    ),
+                ),
+                'configuration_snapshot' => $snapshot,
+            ]);
+
+            foreach ($exam->sections as $section) {
+                foreach ($section->items as $item) {
+                    $question = $item->question;
+                    $attempt->answers()->create([
+                        'question_id' => $question->id,
+                        'section_position' => $section->position,
+                        'question_position' => $item->position,
+                        'question_snapshot' => $this->questionSnapshot($question, $item->id),
+                        'context_snapshot' => $this->contextSnapshot($question),
+                        'max_points' => $item->points,
+                        'save_version' => 0,
+                    ]);
+                }
+            }
+
+            return $attempt;
+        });
+
+        $firstSection = $exam->sections->first();
+
+        return redirect()->route('attempts.sections.show', [$attempt, $firstSection->position])
+            ->with('status', 'Mock exam started.');
+    }
+
     public function show(Attempt $attempt): View|RedirectResponse
     {
-        $this->assertExerciseAttempt($attempt);
+        $this->assertSupportedAttempt($attempt);
 
         if ($attempt->status === 'submitted') {
             return redirect()->route('attempts.result', $attempt);
@@ -80,6 +132,14 @@ class AttemptController extends Controller
             return redirect()->route('attempts.result', $attempt);
         }
 
+        if ($attempt->exam_id !== null) {
+            $snapshot = is_array($attempt->configuration_snapshot) ? $attempt->configuration_snapshot : [];
+            $firstSection = collect($snapshot['sections'] ?? [])->sortBy('position')->first();
+            abort_unless(is_array($firstSection), 404);
+
+            return redirect()->route('attempts.sections.show', [$attempt, (int) $firstSection['position']]);
+        }
+
         $attempt->load('answers');
 
         return view('attempts.show', [
@@ -89,12 +149,58 @@ class AttemptController extends Controller
         ]);
     }
 
+    public function showSection(Attempt $attempt, int $sectionPosition): View|RedirectResponse
+    {
+        $this->assertSupportedAttempt($attempt);
+        abort_unless($attempt->exam_id !== null, 404);
+
+        if ($attempt->status === 'submitted') {
+            return redirect()->route('attempts.result', $attempt);
+        }
+        if ($attempt->status !== 'in_progress') {
+            abort(404);
+        }
+        if ($attempt->expires_at !== null && now()->greaterThanOrEqualTo($attempt->expires_at)) {
+            $this->finalize($attempt, 'deadline');
+
+            return redirect()->route('attempts.result', $attempt);
+        }
+
+        $snapshot = is_array($attempt->configuration_snapshot) ? $attempt->configuration_snapshot : [];
+        $sections = collect($snapshot['sections'] ?? [])->sortBy('position')->values();
+        $section = $sections->first(fn (array $item): bool => (int) ($item['position'] ?? -1) === $sectionPosition);
+        abort_unless(is_array($section), 404);
+
+        $attempt->load('answers');
+        $items = $attempt->answers
+            ->where('section_position', $sectionPosition)
+            ->map(fn (AttemptAnswer $answer): array => $this->takingItem($answer))
+            ->values()
+            ->all();
+        abort_unless($items !== [], 404);
+
+        $sectionIndex = $sections->search(fn (array $item): bool => (int) ($item['position'] ?? -1) === $sectionPosition);
+        $previousSection = $sectionIndex > 0 ? (int) $sections[$sectionIndex - 1]['position'] : null;
+        $nextSection = $sectionIndex < $sections->count() - 1 ? (int) $sections[$sectionIndex + 1]['position'] : null;
+
+        return view('attempts.exam-section', [
+            'attempt' => $attempt,
+            'section' => $section,
+            'items' => $items,
+            'sectionIndex' => $sectionIndex,
+            'sectionCount' => $sections->count(),
+            'previousSection' => $previousSection,
+            'nextSection' => $nextSection,
+            'serverNow' => now(),
+        ]);
+    }
+
     public function updateAnswer(
         AttemptAnswerRequest $request,
         Attempt $attempt,
         AttemptAnswer $attemptAnswer,
     ): JsonResponse {
-        $this->assertExerciseAttempt($attempt);
+        $this->assertSupportedAttempt($attempt);
 
         if ($attemptAnswer->attempt_id !== $attempt->id) {
             abort(404);
@@ -143,11 +249,45 @@ class AttemptController extends Controller
 
     public function submit(AttemptSubmitRequest $request, Attempt $attempt): RedirectResponse
     {
-        $this->assertExerciseAttempt($attempt);
+        $this->assertSupportedAttempt($attempt);
+        $this->saveSubmittedAnswers($attempt, $request->all());
         $deadline = $attempt->expires_at !== null && now()->greaterThanOrEqualTo($attempt->expires_at);
         $this->finalize($attempt, $deadline ? 'deadline' : 'manual');
 
         return redirect()->route('attempts.result', $attempt)->with('status', 'Practice attempt submitted.');
+    }
+
+    private function saveSubmittedAnswers(Attempt $attempt, array $input): void
+    {
+        DB::transaction(function () use ($attempt, $input): void {
+            $lockedAttempt = Attempt::query()->lockForUpdate()->findOrFail($attempt->id);
+            if ($lockedAttempt->status !== 'in_progress') {
+                return;
+            }
+
+            foreach ($lockedAttempt->answers()->lockForUpdate()->get() as $answer) {
+                $response = $input['answer_'.$answer->id] ?? null;
+                if (! is_string($response) || $response === '') {
+                    continue;
+                }
+
+                $snapshot = is_array($answer->question_snapshot) ? $answer->question_snapshot : [];
+                if (! $this->scoring->isAllowedResponse($response, $snapshot)) {
+                    throw ValidationException::withMessages(['answers' => 'One submitted answer is not available for this attempt.']);
+                }
+
+                $normalized = $this->scoring->normalizeResponse($response, $snapshot);
+                if ($normalized === data_get($answer->response, 'value')) {
+                    continue;
+                }
+
+                $answer->update([
+                    'response' => ['value' => $normalized],
+                    'answered_at' => now(),
+                    'save_version' => $answer->save_version + 1,
+                ]);
+            }
+        });
     }
 
     private function finalize(Attempt $attempt, string $reason): void
@@ -242,9 +382,13 @@ class AttemptController extends Controller
         return true;
     }
 
-    private function assertExerciseAttempt(Attempt $attempt): void
+    private function assertSupportedAttempt(Attempt $attempt): void
     {
-        abort_unless($attempt->exercise_id !== null && $attempt->exam_id === null, 404);
+        abort_unless(
+            ($attempt->exercise_id !== null && $attempt->exam_id === null)
+                || ($attempt->exercise_id === null && $attempt->exam_id !== null),
+            404,
+        );
     }
 
     private function exerciseSnapshot(Exercise $exercise): array
@@ -266,10 +410,11 @@ class AttemptController extends Controller
         ];
     }
 
-    private function questionSnapshot(Question $question): array
+    private function questionSnapshot(Question $question, ?int $sourceItemId = null): array
     {
         return [
             'snapshot_version' => 1,
+            'source_item_id' => $sourceItemId,
             'topic_id' => $question->topic_id,
             'topic_name' => $question->topic?->name,
             'type' => $question->type,
@@ -326,6 +471,7 @@ class AttemptController extends Controller
         return [
             'id' => $answer->id,
             'position' => $answer->question_position,
+            'sectionPosition' => $answer->section_position,
             'type' => $snapshot['type'] ?? null,
             'prompt' => $snapshot['prompt'] ?? '',
             'options' => $snapshot['options'] ?? [],

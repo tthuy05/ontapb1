@@ -52,7 +52,7 @@ class Attempt extends Model
 
     public function answers(): HasMany
     {
-        return $this->hasMany(AttemptAnswer::class)->orderBy('question_position');
+        return $this->hasMany(AttemptAnswer::class)->orderBy('section_position')->orderBy('question_position');
     }
 
     public function scopeInProgress(Builder $query): Builder
@@ -67,11 +67,11 @@ class Attempt extends Model
 
     public function getSnapshotTitleAttribute(): string
     {
-        return (string) data_get($this->configuration_snapshot, 'title', $this->exercise?->title ?? 'Practice attempt');
+        return (string) data_get($this->configuration_snapshot, 'title', $this->exercise?->title ?? $this->exam?->title ?? 'Practice attempt');
     }
 
     public function getSnapshotSkillAttribute(): ?string
     {
-        return data_get($this->configuration_snapshot, 'skill', $this->exercise?->skill);
+        return data_get($this->configuration_snapshot, 'skill', $this->exercise?->skill ?? ($this->exam_id !== null ? 'mixed' : null));
     }
 }

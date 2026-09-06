@@ -13,6 +13,8 @@ class Exam extends Model
 
     public const FORMAT_LABELS = ['vstep_simulation', 'general_b1'];
 
+    public const SKILLS = ['reading', 'listening'];
+
     public const STATUSES = Topic::STATUSES;
 
     protected $fillable = [

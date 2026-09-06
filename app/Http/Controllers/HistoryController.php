@@ -16,7 +16,7 @@ class HistoryController extends Controller
         $skill = (string) $request->string('skill');
 
         $attempts = Attempt::query()
-            ->with('exercise')
+            ->with(['exercise', 'exam'])
             ->whereIn('status', Attempt::STATUSES)
             ->when(in_array($status, Attempt::STATUSES, true), fn ($query) => $query->where('status', $status))
             ->when(in_array($skill, Exercise::SKILLS, true), fn ($query) => $query->where('configuration_snapshot->skill', $skill))
@@ -30,7 +30,7 @@ class HistoryController extends Controller
             'search' => $search,
             'status' => $status,
             'skill' => $skill,
-            'skills' => Exercise::SKILLS,
+            'skills' => [...Exercise::SKILLS, 'mixed'],
             'statuses' => Attempt::STATUSES,
         ]);
     }

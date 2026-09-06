@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Practice result · B1 English Self-Study')
+@section('title', ($attempt->exam_id !== null ? 'Mock exam result' : 'Practice result').' · B1 English Self-Study')
 
 @section('content')
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-4">
         <div>
-            <p class="text-primary fw-semibold mb-1">Practice result · not an official VSTEP score</p>
-            <h1 class="h2 mb-1">{{ $attempt->exercise?->title ?? 'Practice result' }}</h1>
+            <p class="text-primary fw-semibold mb-1">{{ $attempt->exam_id !== null ? 'Mock exam result' : 'Practice result' }} · not an official VSTEP score</p>
+            <h1 class="h2 mb-1">{{ $attempt->snapshot_title }}</h1>
             <p class="text-body-secondary mb-0">Attempt #{{ $attempt->id }} · Submitted {{ $attempt->submitted_at?->format('Y-m-d H:i') }}</p>
         </div>
         <div class="text-md-end">
@@ -54,7 +54,7 @@
             <article class="card">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between gap-3 mb-3">
-                        <h2 class="h5 mb-0">Question {{ $item['position'] + 1 }}</h2>
+                        <h2 class="h5 mb-0">@if ($item['section']){{ $item['section'] }} · @endif Question {{ $item['position'] + 1 }}</h2>
                         @if ($item['isCorrect'] === true)
                             <span class="badge text-bg-success">Correct · {{ $item['pointsAwarded'] }}/{{ $item['maxPoints'] }}</span>
                         @elseif ($item['isCorrect'] === false)
@@ -95,7 +95,11 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2 mt-4">
-        <a class="btn btn-primary" href="{{ route('practice.show', $attempt->exercise) }}">Try again</a>
+        @if ($attempt->exam_id !== null)
+            @if ($attempt->exam?->status === 'active')<a class="btn btn-primary" href="{{ route('exams.show', $attempt->exam) }}">Try again</a>@endif
+        @else
+            <a class="btn btn-primary" href="{{ route('practice.show', $attempt->exercise) }}">Try again</a>
+        @endif
         <a class="btn btn-outline-secondary" href="{{ route('practice.index') }}">Back to practice</a>
         <a class="btn btn-outline-secondary" href="{{ route('history.index') }}">View history</a>
     </div>
