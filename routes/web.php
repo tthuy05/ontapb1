@@ -9,19 +9,21 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ListeningController;
 use App\Http\Controllers\Manage\DashboardController as ManageDashboardController;
-use App\Http\Controllers\Manage\ExerciseController as ManageExerciseController;
 use App\Http\Controllers\Manage\ExamController as ManageExamController;
+use App\Http\Controllers\Manage\ExerciseController as ManageExerciseController;
 use App\Http\Controllers\Manage\GrammarLessonController as ManageGrammarLessonController;
 use App\Http\Controllers\Manage\ListeningContentController as ManageListeningContentController;
 use App\Http\Controllers\Manage\PassageController as ManagePassageController;
 use App\Http\Controllers\Manage\QuestionController as ManageQuestionController;
 use App\Http\Controllers\Manage\TopicController as ManageTopicController;
 use App\Http\Controllers\Manage\VocabularyController as ManageVocabularyController;
+use App\Http\Controllers\Manage\WritingPromptController as ManageWritingPromptController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ReadingController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\VocabularyController;
+use App\Http\Controllers\WritingController;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -60,6 +62,12 @@ Route::middleware('owner')->group(function (): void {
     Route::get('/reading/{passage}', [ReadingController::class, 'show'])->name('reading.show');
     Route::get('/listening', [ListeningController::class, 'index'])->name('listening.index');
     Route::get('/listening/{listeningContent}', [ListeningController::class, 'show'])->name('listening.show');
+
+    Route::get('/writing', [WritingController::class, 'index'])->name('writing.index');
+    Route::get('/writing/submissions/{writingSubmission}', [WritingController::class, 'showSubmission'])->name('writing.submissions.show');
+    Route::patch('/writing/submissions/{writingSubmission}', [WritingController::class, 'update'])->name('writing.submissions.update');
+    Route::post('/writing/{writingPrompt}/submissions', [WritingController::class, 'store'])->name('writing.submissions.store');
+    Route::get('/writing/{writingPrompt}', [WritingController::class, 'show'])->name('writing.show');
 
     Route::get('/practice', [PracticeController::class, 'index'])->name('practice.index');
     Route::get('/practice/{exercise}', [PracticeController::class, 'show'])->name('practice.show');
@@ -125,6 +133,10 @@ Route::middleware('owner')->group(function (): void {
         Route::patch('/exams/{exam}/items/order', [ManageExamController::class, 'updateOrder'])
             ->name('exams.items.order.update');
         Route::resource('exams', ManageExamController::class);
+
+        Route::patch('/writing/{writingPrompt}/status', [ManageWritingPromptController::class, 'updateStatus'])->name('writing.status.update');
+        Route::get('/writing/{writingPrompt}/preview', [ManageWritingPromptController::class, 'preview'])->name('writing.preview');
+        Route::resource('writing', ManageWritingPromptController::class)->parameters(['writing' => 'writingPrompt']);
     });
 
     Route::post('/logout', [OwnerSessionController::class, 'destroy'])->name('logout');

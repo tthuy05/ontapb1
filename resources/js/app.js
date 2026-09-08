@@ -140,8 +140,31 @@ const initializeAttemptPage = () => {
     }
 };
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeAttemptPage, { once: true });
-} else {
+const initializeWritingEditor = () => {
+    document.querySelectorAll('[data-writing-editor]').forEach((editor) => {
+        const textarea = editor.querySelector('[data-writing-textarea]');
+        const counter = editor.querySelector('[data-writing-word-count]');
+        if (!textarea || !counter) {
+            return;
+        }
+
+        const updateCount = () => {
+            const words = textarea.value.trim().match(/\S+/gu) || [];
+            counter.textContent = `${words.length} words`;
+        };
+
+        textarea.addEventListener('input', updateCount);
+        updateCount();
+    });
+};
+
+const initializeAppPage = () => {
     initializeAttemptPage();
+    initializeWritingEditor();
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAppPage, { once: true });
+} else {
+    initializeAppPage();
 }

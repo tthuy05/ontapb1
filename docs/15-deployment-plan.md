@@ -194,6 +194,21 @@ Sprint 4 is an application-only release. It adds result breakdowns, snapshot-sta
 
 The Sprint 4 release archive is uploaded only after a fresh read-only production audit confirms the Sprint 3 baseline, and it preserves the existing untracked `.env` and runtime `storage`. Hosted verification covers History/Review/result breakdowns, owner protection, snapshot behavior, responsive layout, and Sprint 0–3 regression paths. Sprint 5 remains unopened.
 
+## Sprint 5 production update
+
+Sprint 5 reused the Sprint 3 exam dependency tables and added the mock-exam catalog, section/take flow, timer, submission, raw result, and history integration. No Sprint 5 migration or SQL import was required. The active pilot references the existing Sprint 2 Reading question through the existing Sprint 3 exercise/question mapping. Production remained at 18 tables and 17 migrations, and the existing `.env`, `storage`, content, and vocabulary progress were preserved.
+
+## Sprint 6 production update
+
+Sprint 6 was deployed on 8 September 2026 to `https://hoctienganh.site.je/` and database `if0_42788092_b1` on `sql213.infinityfree.com`.
+
+- The reviewed [Sprint 6 SQL](../database/infinityfree/sprint-6-update.sql) was imported exactly once after a read-only baseline audit. It created only `writing_submissions`, inserted migration `2026_09_08_001800_create_writing_submissions_table` in batch 4, and upserted two original active prompts. It contains no executable `ALTER TABLE`, `DROP`, `TRUNCATE`, destructive `DELETE`, database recreation, or reset operation.
+- The post-deployment database has exactly 19 tables, 18 migration rows, and 61 total rows. `writing_prompts` has the two approved pilot prompts; `writing_submissions` has one expected hosted smoke record with status `submitted`, `word_count=130`, and `writing_prompt_id=1`. Existing Sprint 0–5 counts remain unchanged: topics 5, vocabularies 3, vocabulary progress 1, grammar 1, passages 1, listening 1, questions 2, options 5, exercises 1, exercise questions 1, exams 1, exam sections 1, exam section items 1, attempts 8, attempt answers 8, and speaking prompts 0.
+- The full release was `release-20260908-175957-sprint6-tar.zip`, SHA-256 `544485946360622B5E4850FB1F00A657ED36280BD16CED36760E06D541192DD9`. The first hosted route audit found only `/manage/writing` failing because two Blade view namespace references were malformed. A targeted upload then replaced only `resources/views/manage/writing/index.blade.php` and `_form.blade.php` from `release-20260908-183701-sprint6-fix-tar.zip`, SHA-256 `88712BBA314E1B1B096977210B05E579C4C52B54A3B7D79ABAB7C5A623B09CF3`. No other files were re-uploaded.
+- Both releases excluded `.env` and runtime data. File Manager confirmed `/htdocs/.env` remained 642 B and `/htdocs/storage` remained present. No production secrets were printed or committed.
+- Hosted smoke verified Writing listing, editor, draft save, submitted review, Manage Writing index/detail/preview, all Sprint 0–5 regression routes, and no horizontal overflow at the tested mobile viewport. Direct `/health` navigation was blocked by the browser client with `ERR_BLOCKED_BY_CLIENT`; this is recorded as an unverified provider/browser edge path, not claimed as a pass.
+- The final implementation and hosted evidence are recorded in [Document 18](18-sprint-6-final-report.md). Sprint 7 was not started.
+
 ## Fallback: Render Free + Neon Free
 
 Keep this path documented but inactive. Render Free requires a Docker PHP runtime, has an ephemeral filesystem and cold starts, and its own documentation says Free instances should not be used for production. Neon Free changes the production engine to PostgreSQL and has its own compute, storage, restore-history, and network quotas. Activation requires an explicit owner decision, a PostgreSQL compatibility pass, a restore rehearsal, and a separate deployment review. Do not create Render, Neon, Docker, or paid resources for Sprint 0 while InfinityFree remains viable.

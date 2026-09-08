@@ -136,7 +136,7 @@ $manifest = [ordered]@{
     document_root = 'htdocs'
     environment_file = 'Create manually in htdocs; never upload local .env'
     database_bootstrap = 'database/infinityfree/sprint-0-schema.sql for a new database only'
-    database_update = 'Sprint 5: no schema change and no production SQL import required'
+    database_update = 'Sprint 6: import database/infinityfree/sprint-6-update.sql once through phpMyAdmin'
     excluded = @('.env', 'node_modules', 'tests', 'logs', 'local database files', 'source-control metadata', 'dev Composer packages')
 }
 $manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $releaseRoot 'DEPLOYMENT-MANIFEST.json') -Encoding utf8

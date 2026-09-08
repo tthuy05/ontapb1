@@ -146,6 +146,15 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - Risks: self-check mistaken for examiner assessment.
 - Definition of done: original prompts and responses are durable, reviewable, and honestly labeled.
 
+### Sprint 6 implementation record — 8 September 2026
+
+- [x] Added Writing prompt management, Task 1/Task 2 metadata, learner editor, server-side Unicode word count, self-check fields, prompt snapshots, optimistic draft saves, and immutable submitted review.
+- [x] Added `writing_submissions` with restricted foreign keys and the named `(attempt_id, exam_section_item_id)` uniqueness rule; no existing Sprint 0–5 table was altered.
+- [x] Added two active original pilot prompts and imported the reviewed Sprint 6 SQL exactly once. Production finished at 19 tables and 18 migration rows; the existing content/progress rows were preserved.
+- [x] Uploaded the full Sprint 6 release without `.env` or runtime storage, then uploaded only the two corrected Manage Writing views after the first hosted route audit found a namespace rendering defect.
+- [x] Full local suite passed with 84 tests and 549 assertions. Hosted Writing smoke tests, Sprint 0–5 regression routes, and representative mobile overflow checks passed; direct `/health` was blocked by the browser client and is recorded as such.
+- [x] Final evidence is recorded in `docs/18-sprint-6-final-report.md`. Sprint 7 was not started.
+
 ## Sprint 7 — Speaking practice with local recording
 
 **Goal:** provide timed speaking rehearsal without consuming server audio storage.

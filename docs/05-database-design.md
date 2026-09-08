@@ -33,6 +33,12 @@ Production retained the Sprint 0–2 counts: 5 topics, 3 vocabularies, 1 vocabul
 
 Sprint 4 adds no tables, columns, indexes, foreign keys, pilot content, or migration rows. Result breakdowns, History, and wrong-answer Review read the existing `attempts`, `attempt_answers`, and immutable JSON snapshots. The forward-only [Sprint 4 SQL](../database/infinityfree/sprint-4-update.sql) is intentionally comment-only, so no production SQL import is required.
 
+## Sprint 6 implementation and production status
+
+Sprint 6 adds only the forward-only `writing_submissions` table. Its three foreign keys use restricted deletes, and its named unique constraint protects exam-attempt/item pairs while allowing independent practice submissions with nullable attempt references. The reviewed [Sprint 6 SQL](../database/infinityfree/sprint-6-update.sql) contains no `ALTER TABLE`, destructive statement, database recreation, or reset operation.
+
+Production verification after the one import and hosted Writing smoke flow shows 19 tables, 18 migration rows, two active original `writing_prompts`, and one submitted `writing_submissions` smoke row. The pre-existing Sprint 0–5 counts remain unchanged, including one vocabulary-progress row.
+
 ## Tables
 
 ### `topics`

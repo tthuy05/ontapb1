@@ -70,6 +70,8 @@ For every MVP objective type, table-driven unit cases cover correct, incorrect, 
 - Prompt snapshots and submitted text survive later prompt edits.
 - Word count has agreed handling of contractions, punctuation, numbers, Unicode and whitespace.
 - Writing/speaking pages do not generate an official score.
+- Sprint 6 feature coverage verifies draft/submitted state transitions, optimistic save versions, immutable submitted responses, restricted prompt references, long-text limits, and original-content provenance.
+- The hosted Sprint 6 smoke flow verified prompt listing, editor, draft save, 130-word submit, prompt-snapshot review, and owner Manage Writing pages.
 - Speaking server requests contain notes/metadata only; manual network inspection confirms recorded blobs are not uploaded.
 - Browser checks cover supported codec, fallback codec, denied permission, missing device, insecure-context development warning and unsupported API.
 

@@ -50,6 +50,10 @@ History and wrong-answer Review are owner-protected. Review eligibility requires
 - Production disables debug output and detailed exception pages. Log a request ID, not secrets or full candidate responses.
 - Set baseline headers: HSTS after HTTPS is stable, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, a restrictive `Permissions-Policy` with microphone allowed only for self, and a practical Content Security Policy tested with Laravel/Bootstrap assets.
 
+## Sprint 6 Writing safety
+
+Writing submissions are owner-protected, CSRF-protected, length-limited, and validated through Form Requests. The server derives `word_count`, stores an immutable prompt snapshot, rejects stale draft versions, and prevents edits after submission. Responses and self-checks are not scored as official VSTEP results. The production release and targeted view correction excluded `.env`, credentials, and runtime storage.
+
 ## Secrets and configuration
 
 - Environment/host secret store: `APP_KEY`, owner password hash, database credentials, production URL, session settings and optional health-check token.

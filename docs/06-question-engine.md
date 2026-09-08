@@ -6,7 +6,7 @@ The question engine handles automatically scoreable, reusable objective items. W
 
 ## Sprint 3 shipped behavior
 
-The deployed Sprint 3 engine implements the MVP `single_choice`/`true_false` path for Exercises. Starting an exercise snapshots the prompt, option text/keys, correct key, explanation, source context, order, and points into pre-created `attempt_answers`; the take page omits correctness and explanations. Answer saves validate against that snapshot with optimistic `save_version`, and submission scores on the server from the stored snapshot. The hosted pilot successfully saved, survived reload, submitted, and rendered a 100% result with feedback revealed only after submission. Multiple choice, fill-blank, Writing, Speaking, and Exam scoring remain future scope.
+The deployed Sprint 3 engine implements the MVP `single_choice`/`true_false` path for Exercises. Starting an exercise snapshots the prompt, option text/keys, correct key, explanation, source context, order, and points into pre-created `attempt_answers`; the take page omits correctness and explanations. Answer saves validate against that snapshot with optimistic `save_version`, and submission scores on the server from the stored snapshot. The hosted pilot successfully saved, survived reload, submitted, and rendered a 100% result with feedback revealed only after submission. Sprint 5 adds the mock-exam flow, and Sprint 6 adds unscored Writing practice with durable prompt/response snapshots. Multiple choice, fill-blank, Speaking, and Writing/Exam official scoring remain future scope.
 
 ## Sprint 4 shipped behavior
 
@@ -21,8 +21,12 @@ Result pages group raw points, counts, and percentages by snapshotted skill, top
 | `multiple_choice` | unique set of option keys | all-or-nothing initially | Post-MVP, approval required |
 | `fill_blank` | text/list of blanks | normalized exact accepted answers | Post-MVP |
 | `short_answer` | text | manual/self-review | Future if useful |
-| Writing | dedicated submission | not automatic in MVP | Later MVP |
+| Writing | dedicated submission | not automatic in MVP | MVP |
 | Speaking | dedicated metadata/recording flow | not automatic in MVP | Later MVP |
+
+## Sprint 6 Writing behavior
+
+Writing is intentionally outside the objective scoring engine. The server counts Unicode non-whitespace tokens, validates draft/submitted state, stores a prompt snapshot, and keeps submitted responses immutable. Self-check fields are guidance only; the UI and review pages never present an official VSTEP score.
 
 The database uses a string type and validated JSON response, so adding a type does not require a universal schema. A type is enabled only after its validation, UI, snapshot, scoring, and tests exist.
 

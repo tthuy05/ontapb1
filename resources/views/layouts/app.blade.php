@@ -34,6 +34,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('grammar.index') }}">Grammar</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('reading.index') }}">Reading</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('listening.index') }}">Listening</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('writing.index') }}">Writing</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('practice.index') }}">Practice</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('exams.index') }}">Mock exams</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('history.index') }}">History</a></li>

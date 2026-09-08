@@ -12,6 +12,12 @@ class WritingPrompt extends Model
 {
     use HasFactory;
 
+    public const TASK_TYPES = ['task_1', 'task_2'];
+
+    public const SOURCE_TYPES = Vocabulary::SOURCE_TYPES;
+
+    public const STATUSES = Topic::STATUSES;
+
     protected $fillable = [
         'topic_id', 'task_type', 'title', 'instructions', 'minimum_words', 'recommended_minutes',
         'guidance', 'checklist', 'model_answer', 'source_type', 'source_reference', 'license_name',
@@ -35,6 +41,11 @@ class WritingPrompt extends Model
     public function examSectionItems(): HasMany
     {
         return $this->hasMany(ExamSectionItem::class);
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(WritingSubmission::class);
     }
 
     public function scopeActive(Builder $query): Builder

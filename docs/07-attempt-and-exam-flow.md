@@ -17,7 +17,15 @@ stateDiagram-v2
 
 ## Sprint 3 shipped subset
 
-Production ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, result breakdowns, snapshot-based History, and wrong-answer Review. The implementation creates the attempt and its answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. History and Review never join live question content for their historical wording or answers. Exams, Writing, and Speaking flows described later in this document remain unopened.
+Production ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, result breakdowns, snapshot-based History, wrong-answer Review, and the Sprint 5 mock-exam flow. Sprint 6 adds independent Writing drafts/submissions with server word counts and prompt snapshots; it does not claim official scoring. The implementation creates attempt and answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. History and Review never join live question content for their historical wording or answers. Speaking remains unopened.
+
+## Sprint 6 Writing flow
+
+1. Browse active original prompts from `/writing`.
+2. Open a Task 1 or Task 2 prompt and complete the editor/self-check fields.
+3. Save a draft with a server-checked optimistic `save_version`, or submit a non-empty response for practice review.
+4. Store the server word count and immutable prompt snapshot; submitted responses cannot be edited.
+5. Review the response and self-check without an automatic or official score.
 
 ## Start
 
