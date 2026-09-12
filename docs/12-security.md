@@ -137,6 +137,12 @@ The deployed response headers include `Content-Security-Policy`, `Permissions-Po
 
 InfinityFree's edge blocked direct navigation to `/health` and protected source paths during this verification run; the application-level same-origin health check passed and the blocked paths disclosed no file content. This is recorded as a provider-edge limitation, not bypassed.
 
+## Sprint 8 hardening verification
+
+All state-changing study and Manage routes now carry the dedicated `study-write` limiter at 120 requests per minute per IP/session key, while owner login and health retain their separate stricter limiters. The private `study:export` command exports only the allow-listed study/migration tables and rejects traversal or public-disk paths; it never exports `.env`, sessions, logs, cache, audio, or credentials. `content:validate` checks approved values, provenance, active relationships, question options, exam/exercise links, passage counts, audio metadata, and submitted practice invariants.
+
+The release adds generic 403/404/419/429/500/503 pages that do not expose stack traces, database details, or environment values. Keyboard focus is visible, a skip link targets the main landmark, and save/timer/error messages use appropriate live regions. The focused and full local suites pass as recorded in [Document 21](21-sprint-8-final-report.md). No database migration or production SQL write is required for Sprint 8.
+
 ## Deferred security work
 
 If future scope adds multiple users, public sharing, cloud recording, AI services, email, or payments, this threat model and schema must be redesigned before implementation. The current one-owner gate must not be stretched into an improvised multi-user system.

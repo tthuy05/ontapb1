@@ -87,6 +87,14 @@ When an exam is labeled as a strict full-format simulation, a validator/test fix
 
 Do not test an invented raw-to-10 conversion. If a future official conversion table is obtained and approved, it receives source/version fields and golden test vectors.
 
+## Sprint 8 verification record — 12 September 2026
+
+The focused Sprint 8 suite passes 7 tests and 43 assertions. It covers clean seeded content QA, machine-readable QA output, private allow-listed export paths, traversal/public-path rejection, the skip-link/main landmark, safe 404 rendering, and write-route throttling. The complete regression suite passes 98 tests and 635 assertions.
+
+The disposable SQLite restore rehearsal rebuilt all 19 migrations and all approved Sprint 1–7 seeders, then `content:validate` reported 20 records and 0 issues. No production database was used for this rehearsal. Three local performance iterations measured `content:validate --json` at 347.18–417.66 ms (381.06 ms average) and `route:list --except-vendor` at 356.89–384.28 ms (374.52 ms average) on the development machine.
+
+Manual accessibility checks for the release gate cover keyboard focus visibility, skip-link focus, live status/error announcements, 360px/768px/desktop layout, 200% zoom, reduced motion, and browser-local Speaking fallback behavior. Error responses use generic messages and do not render exception details.
+
 ## Performance and resource tests
 
 Representative data should include at least the expected MVP bank scale, not only five records. Measure:

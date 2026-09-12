@@ -219,7 +219,17 @@ Sprint 7 adds browser-local Speaking practice and one metadata-only review table
 - Hosted smoke testing passed the learner prompt list, part filter, all three prompt pages, Manage Speaking list/detail/preview/create/edit routes, browser-local preparation and speaking timers, playback/download wiring, fallback messaging after denied microphone permission, and the immutable submitted review. The single smoke review references prompt 1, is submitted, records 8 seconds and version 2, and appears as one submission in Manage Speaking.
 - Sprint 0–6 regression routes, protected-route behavior, security headers, source-path denials, and the tested mobile viewport remained clean. Direct /health navigation was blocked by the browser client with ERR_BLOCKED_BY_CLIENT and is not claimed as a fresh Sprint 7 health pass.
 
-The complete implementation and verification record is in [Document 19](19-sprint-7-final-report.md). Sprint 8 remains unopened.
+The complete implementation and verification record is in [Document 19](19-sprint-7-final-report.md). Sprint 8 follows as an application-only hardening release.
+
+## Sprint 8 production update
+
+Sprint 8 is an application-only hardening release. It adds content QA/export commands for operator use, write-route throttling, safe error pages, and accessibility refinements. The local measured review found no concrete schema/index change, so there is no Sprint 8 production SQL import and no migration-row change; the production database remains at exactly 20 tables and 19 migrations.
+
+Before any application upload, perform a fresh read-only audit against the Sprint 7 baseline: the existing tables/migration rows, vocabulary progress, topics, vocabularies, grammar, Reading, Listening, questions/options, writing and speaking history, `.env` size/presence, and runtime `storage` must match the recorded baseline. Upload only the reviewed application release contents, excluding `.env`, `storage`, database exports, logs, caches, `vendor`, and development artifacts. Preserve the existing production `.env` and runtime storage in place.
+
+After upload, run the hosted health/login/dashboard, learner and Manage route inventory, content visibility, progress/history/result, Practice and mock-exam attempt, Writing, Speaking browser-local recording/fallback, security-header, protected-path, generic-error, and mobile overflow checks. If provider-edge blocking prevents a direct `/health` navigation, record that limitation and verify the same-origin response without weakening source-path protections. Do not start Sprint 9.
+
+The local export/restore rehearsal and performance evidence, plus the production deployment record, are in [Document 21](21-sprint-8-final-report.md). The approved app-only release was extracted successfully after a transient File Manager response error; the post-upload database remained at exactly 20 tables, 66 rows, and 19 migrations, while `.env` and runtime storage were preserved. Hosted route and safe-404 checks passed. The provider/client edge blocked direct `/health` verification and direct HTTP inspection returned the edge JavaScript challenge, so that limitation remains recorded rather than treated as a pass.
 
 ## Fallback: Render Free + Neon Free
 

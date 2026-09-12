@@ -189,6 +189,10 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - Risks: free-tier operational limitations and inconsistent content quality.
 - Definition of done: MVP checklist, security tests, restore test, accessibility audit and deployment runbook all pass.
 
+### Sprint 8 implementation record — 12 September 2026
+
+Sprint 8 local hardening adds a private allow-listed `study:export` JSON command, a `content:validate` relationship/provenance QA command, repeatable performance measurement, write-route throttling, safe generic error pages, and keyboard/focus/live-region improvements. No schema change or speculative index was required. The implementation and verification record is in [Document 21](21-sprint-8-final-report.md).
+
 ## Sprint 9 — controlled content expansion
 
 **Goal:** grow from pilot content to the approved B1 syllabus without breaking quality or quota.

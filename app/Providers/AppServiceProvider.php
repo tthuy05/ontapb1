@@ -27,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('health', fn (Request $request): Limit => Limit::perMinute(60)->by($request->ip()));
 
+        RateLimiter::for('study-write', fn (Request $request): Limit => Limit::perMinute(120)
+            ->by($request->ip().'|'.$request->session()->getId()));
+
         if ((bool) config('app.force_https')) {
             URL::forceScheme('https');
         }

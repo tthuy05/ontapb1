@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-body-tertiary">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="border-bottom bg-white">
         <nav class="navbar navbar-expand-lg container py-3" aria-label="Primary navigation">
             <a class="navbar-brand fw-semibold" href="{{ route('dashboard') }}">
@@ -53,17 +54,17 @@
         </nav>
     </header>
 
-    <main class="container py-4 py-md-5">
+    <main class="container py-4 py-md-5" id="main-content" tabindex="-1">
         @if (session('status'))
-            <div class="alert alert-success" role="status">{{ session('status') }}</div>
+            <div class="alert alert-success" role="status" aria-live="polite">{{ session('status') }}</div>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+            <div class="alert alert-danger" role="alert" aria-live="assertive">{{ session('error') }}</div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger" role="alert" aria-labelledby="validation-heading">
+            <div class="alert alert-danger" role="alert" aria-live="assertive" aria-labelledby="validation-heading">
                 <h2 class="h6" id="validation-heading">Please correct the highlighted fields.</h2>
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)

@@ -2,7 +2,7 @@
 
 Private, single-owner VSTEP Level 3 / B1 study application built with Laravel 13, PHP 8.3+, Blade, Bootstrap, and MariaDB/MySQL.
 
-Sprint 7 extends the Sprint 0–6 foundation with Speaking practice: owner-managed Part 1/2/3 prompts, preparation/speaking timers, browser-local MediaRecorder playback/download, durable textual self-review metadata, and immutable prompt snapshots. Audio is never uploaded; there is still no registration, `users` table, role system, AI scoring, or server-side Speaking archive.
+Sprint 8 hardens the Sprint 0–7 foundation with private study export/content QA commands, write-route throttling, safe error pages, and accessibility refinements. Speaking audio remains browser-local; there is still no registration, `users` table, role system, AI scoring, or server-side Speaking archive.
 
 ## Local setup
 
@@ -37,18 +37,20 @@ php artisan db:seed --force
 php artisan serve
 ```
 
-The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question. Sprint 4 adds application-only history/review; Sprint 5 adds the mock-exam flow; Sprint 6 adds Writing practice and its forward-only submission schema; Sprint 7 adds Speaking practice and its metadata-only submission schema.
+The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question. Sprint 4 adds application-only history/review; Sprint 5 adds the mock-exam flow; Sprint 6 adds Writing practice and its forward-only submission schema; Sprint 7 adds Speaking practice and its metadata-only submission schema; Sprint 8 adds hardening, content QA, export, and accessibility checks.
 
 ## Checks
 
 ```bash
 vendor/bin/pint --dirty --format agent
-php artisan test --compact
+vendor/bin/phpunit
 composer validate --strict --no-check-publish
 composer audit
 pnpm run build
 pnpm audit --prod
 php artisan route:list --except-vendor
+php artisan content:validate
+php artisan study:export --pretty
 ```
 
 ## Production configuration

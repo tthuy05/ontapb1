@@ -22,8 +22,8 @@
                 <h2 class="h5">Timed local rehearsal</h2>
                 <p class="small text-body-secondary">Allow microphone access when asked. The recording is held in memory, playable here, and downloadable locally; only its duration is saved with your practice review.</p>
                 <div data-speaking-recorder data-preparation-seconds="{{ $speakingPrompt->preparation_seconds ?? 0 }}" data-speaking-seconds="{{ $speakingPrompt->speaking_seconds ?? 120 }}" class="border rounded p-3 mb-4">
-                    <div class="d-flex flex-wrap align-items-center gap-2"><span class="badge text-bg-light" data-speaking-timer>Ready</span><button class="btn btn-primary" type="button" data-speaking-start>Start local rehearsal</button><button class="btn btn-outline-danger" type="button" data-speaking-stop disabled>Stop</button><button class="btn btn-outline-secondary" type="button" data-speaking-play disabled>Play</button><a class="btn btn-outline-secondary" data-speaking-download hidden>Download</a></div>
-                    <p class="small mt-2 mb-0" data-speaking-status role="status"></p>
+                    <div class="d-flex flex-wrap align-items-center gap-2"><span class="badge text-bg-light" data-speaking-timer role="timer" aria-live="polite">Ready</span><button class="btn btn-primary" type="button" data-speaking-start>Start local rehearsal</button><button class="btn btn-outline-danger" type="button" data-speaking-stop disabled>Stop</button><button class="btn btn-outline-secondary" type="button" data-speaking-play disabled>Play</button><a class="btn btn-outline-secondary" data-speaking-download hidden>Download</a></div>
+                    <p class="small mt-2 mb-0" data-speaking-status role="status" aria-live="polite"></p>
                     <audio class="w-100 mt-3" data-speaking-audio controls hidden></audio>
                     <input type="hidden" name="duration_seconds" value="{{ old('duration_seconds', $draft?->duration_seconds) }}" data-speaking-duration>
                 </div>
