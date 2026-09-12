@@ -70,5 +70,10 @@
                 <div class="card-body p-4"><h2 class="h5 text-body">Writing</h2><p class="text-body-secondary mb-0">Create original Task 1 and Task 2 prompts for practice.</p><span class="small text-body-secondary">{{ $counts['writing'] }} prompts</span></div>
             </a>
         </div>
+        <div class="col-12 col-md-4">
+            <a class="manage-card card h-100 text-decoration-none" href="{{ route('manage.speaking.index') }}">
+                <div class="card-body p-4"><h2 class="h5 text-body">Speaking</h2><p class="text-body-secondary mb-0">Create timed prompts with local recording and self-review only.</p><span class="small text-body-secondary">{{ $counts['speaking'] }} prompts</span></div>
+            </a>
+        </div>
     </div>
 @endsection

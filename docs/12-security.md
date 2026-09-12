@@ -54,6 +54,10 @@ History and wrong-answer Review are owner-protected. Review eligibility requires
 
 Writing submissions are owner-protected, CSRF-protected, length-limited, and validated through Form Requests. The server derives `word_count`, stores an immutable prompt snapshot, rejects stale draft versions, and prevents edits after submission. Responses and self-checks are not scored as official VSTEP results. The production release and targeted view correction excluded `.env`, credentials, and runtime storage.
 
+## Sprint 7 Speaking safety
+
+Speaking submissions are owner-protected, CSRF-protected, length-limited, and validated through a Form Request. The server accepts only duration, notes, self-assessment, save version, and prompt snapshot metadata. The browser requests microphone access only in a secure context with `Permissions-Policy: microphone=(self)` and uses `MediaRecorder` locally; it never submits a Blob or file input. CSP allows `blob:` only for local media playback. Permission denial, missing devices, unsupported APIs, and codec differences degrade to prompt/timer/notes rather than blocking study. Submitted metadata is immutable and is not an official VSTEP score.
+
 ## Secrets and configuration
 
 - Environment/host secret store: `APP_KEY`, owner password hash, database credentials, production URL, session settings and optional health-check token.

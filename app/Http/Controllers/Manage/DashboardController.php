@@ -9,6 +9,7 @@ use App\Models\GrammarLesson;
 use App\Models\ListeningContent;
 use App\Models\Passage;
 use App\Models\Question;
+use App\Models\SpeakingPrompt;
 use App\Models\Topic;
 use App\Models\Vocabulary;
 use App\Models\WritingPrompt;
@@ -29,6 +30,7 @@ class DashboardController extends Controller
                 'exercises' => Exercise::query()->count(),
                 'exams' => Exam::query()->count(),
                 'writing' => WritingPrompt::query()->count(),
+                'speaking' => SpeakingPrompt::query()->count(),
                 'drafts' => Topic::query()->where('status', 'draft')->count()
                     + Vocabulary::query()->where('status', 'draft')->count()
                     + GrammarLesson::query()->where('status', 'draft')->count()
@@ -37,7 +39,8 @@ class DashboardController extends Controller
                     + Question::query()->where('status', 'draft')->count()
                     + Exercise::query()->where('status', 'draft')->count()
                     + Exam::query()->where('status', 'draft')->count()
-                    + WritingPrompt::query()->where('status', 'draft')->count(),
+                    + WritingPrompt::query()->where('status', 'draft')->count()
+                    + SpeakingPrompt::query()->where('status', 'draft')->count(),
             ],
         ]);
     }

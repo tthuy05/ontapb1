@@ -168,6 +168,14 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 - Risks: codec/browser variation, permission denial, recordings lost on navigation.
 - Definition of done: supported browsers can rehearse and download locally; unsupported paths retain timer/prompts/notes.
 
+### Sprint 7 implementation record — 8–12 September 2026
+
+- [x] Added Speaking prompt CRUD, provenance/status rules, active-prompt visibility, local recording controls, preparation/speaking timers, self-review metadata, prompt snapshots, and immutable submitted reviews.
+- [x] Added `speaking_submissions` as a metadata-only table with restricted foreign keys, the named `(attempt_id, exam_section_item_id)` uniqueness rule, and status/query indexes; no existing Sprint 0–6 table was altered.
+- [x] Added three original active pilot prompts and the reviewed forward-only InfinityFree SQL update; the production import was performed exactly once after the Sprint 6 baseline audit.
+- [x] Built the production release with production-only dependencies/assets while excluding `.env`, `storage`, tests, logs, local databases, and development packages.
+- [x] Local verification passed: focused Speaking tests, full suite (91 tests, 592 assertions), disposable migration/seed rehearsal, PHP lint, targeted Pint, Composer/package audits, Vite build, view cache, route inventory, and release audit.
+
 ## Sprint 8 — hardening, content QA, and accessibility
 
 **Goal:** make the MVP dependable for sustained personal use.

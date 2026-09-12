@@ -17,7 +17,7 @@ stateDiagram-v2
 
 ## Sprint 3 shipped subset
 
-Production ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, result breakdowns, snapshot-based History, wrong-answer Review, and the Sprint 5 mock-exam flow. Sprint 6 adds independent Writing drafts/submissions with server word counts and prompt snapshots; it does not claim official scoring. The implementation creates attempt and answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. History and Review never join live question content for their historical wording or answers. Speaking remains unopened.
+Production ships Exercise start, resume, versioned objective-answer save, manual submit, server scoring, result breakdowns, snapshot-based History, wrong-answer Review, and the Sprint 5 mock-exam flow. Sprint 6 adds independent Writing drafts/submissions with server word counts and prompt snapshots; Sprint 7 adds independent Speaking drafts/submissions with duration, notes, self-assessment, and prompt snapshots. Neither manual practice flow claims official scoring. The implementation creates attempt and answer snapshots transactionally, rejects edits after submission or expiry, and uses `ScoringService` for supported objective types. History and Review never join live question content for their historical wording or answers.
 
 ## Sprint 6 Writing flow
 
@@ -26,6 +26,14 @@ Production ships Exercise start, resume, versioned objective-answer save, manual
 3. Save a draft with a server-checked optimistic `save_version`, or submit a non-empty response for practice review.
 4. Store the server word count and immutable prompt snapshot; submitted responses cannot be edited.
 5. Review the response and self-check without an automatic or official score.
+
+## Sprint 7 Speaking flow
+
+1. Browse active Part 1/2/3 prompts from `/speaking`.
+2. Read the prompt and start the browser-local preparation timer.
+3. Record during the speaking timer when HTTPS, permission, and browser APIs are available; otherwise continue with the prompt and notes fallback.
+4. Stop, play, or download the local recording. Only duration, notes, self-assessment, and the immutable prompt snapshot are sent to the server.
+5. Save a draft or submit a practice self-review; submitted rows are immutable and carry no server audio.
 
 ## Start
 

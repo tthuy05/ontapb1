@@ -15,7 +15,7 @@ Future work is considered only after the MVP is used with real study content. A 
 | Study-plan dashboard | Weekly targets and gap visibility | Stable use and meaningful history | Can become gamified/noisy |
 | PWA/offline reading | Resilience during poor connectivity | Owner has recurring offline need | Cache invalidation and unsaved-attempt conflicts |
 | Better result analytics | Identify topic/type weaknesses | Enough attempts for stable signal | Misleading conclusions from small samples |
-| Locally stored speaking history | Keep selected recordings on device | Browser storage/download workflow is inconvenient | Quota, portability, accidental loss |
+| Locally stored speaking history | Keep selected recordings on device | Browser download workflow is inconvenient | Quota, portability, accidental loss; Sprint 7 keeps only server metadata |
 
 ## Larger features requiring a new design approval
 

@@ -12,6 +12,12 @@ class SpeakingPrompt extends Model
 {
     use HasFactory;
 
+    public const PART_TYPES = ['social_interaction', 'solution_discussion', 'topic_development', 'general'];
+
+    public const SOURCE_TYPES = Vocabulary::SOURCE_TYPES;
+
+    public const STATUSES = Topic::STATUSES;
+
     protected $fillable = [
         'topic_id', 'part_type', 'title', 'instructions', 'preparation_seconds', 'speaking_seconds',
         'suggested_ideas', 'follow_up_questions', 'checklist', 'source_type', 'source_reference',
@@ -37,6 +43,11 @@ class SpeakingPrompt extends Model
     public function examSectionItems(): HasMany
     {
         return $this->hasMany(ExamSectionItem::class);
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(SpeakingSubmission::class);
     }
 
     public function scopeActive(Builder $query): Builder

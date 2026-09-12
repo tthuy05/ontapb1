@@ -39,6 +39,12 @@ Sprint 6 adds only the forward-only `writing_submissions` table. Its three forei
 
 Production verification after the one import and hosted Writing smoke flow shows 19 tables, 18 migration rows, two active original `writing_prompts`, and one submitted `writing_submissions` smoke row. The pre-existing Sprint 0–5 counts remain unchanged, including one vocabulary-progress row.
 
+## Sprint 7 implementation and production status
+
+Sprint 7 adds only the forward-only `speaking_submissions` table. Its three foreign keys use restricted deletes: the required `speaking_prompt_id`, plus nullable `attempt_id` and `exam_section_item_id`. The named `(attempt_id, exam_section_item_id)` unique constraint protects exam-linked manual items while nullable independent practice rows remain possible. The table stores prompt snapshots, duration, self-assessment, notes, save version, and completion time; it has no audio path, blob, or recording column.
+
+The reviewed [Sprint 7 SQL](../database/infinityfree/sprint-7-update.sql) creates one table, records migration `2026_09_08_001900_create_speaking_submissions_table` in batch 5, and upserts three original active pilot prompts into the existing `speaking_prompts` table. It contains no executable `ALTER TABLE`, destructive statement, database recreation, or reset operation. The expected successful production state is 20 tables and 19 migration rows; the hosted rehearsal may add one metadata-only submitted row while leaving all prior content and vocabulary progress unchanged.
+
 ## Tables
 
 ### `topics`

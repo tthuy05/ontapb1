@@ -14,7 +14,7 @@ Design priorities:
 
 ## Sprint 4 shipped UI
 
-The deployed Sprint 3 pages remain the Practice catalog, exercise detail/start page, attempt page, result page, and Manage Exercise views. Sprint 4 adds the result breakdown, dashboard recent-practice/review summary, History filters, and snapshot-based wrong-answer Review. Sprint 5 adds the mock-exam catalog/take/result pages. Sprint 6 adds learner Writing prompts/editor/review and Manage Writing prompt pages. The objective take page still withholds correctness and explanations; History and Review use stored snapshots. Speaking remains unopened.
+The deployed Sprint 3 pages remain the Practice catalog, exercise detail/start page, attempt page, result page, and Manage Exercise views. Sprint 4 adds the result breakdown, dashboard recent-practice/review summary, History filters, and snapshot-based wrong-answer Review. Sprint 5 adds the mock-exam catalog/take/result pages. Sprint 6 adds learner Writing prompts/editor/review and Manage Writing prompt pages. Sprint 7 adds learner Speaking prompt/timer/recorder/review and Manage Speaking prompt pages. The objective take page still withholds correctness and explanations; History and Review use stored snapshots.
 
 ## Shared shell
 
@@ -123,6 +123,10 @@ Technical references accessed 29 August 2026:
 - W3C MediaStream Recording Working Draft, 16 March 2026: <https://www.w3.org/TR/mediastream-recording/>
 - MDN `getUserMedia()` secure-context/permission behavior: <https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia>
 - MDN `MediaRecorder.isTypeSupported()`: <https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported_static>
+
+## Sprint 7 UI behavior
+
+Speaking pages show the prompt, Part label, preparation/speaking durations, ideas, follow-up questions, and a self-review checklist. The progressive enhancement exposes text-labelled Start, Stop, Play, Download, timer, and status controls. Unsupported or denied microphone paths retain the prompt, timer, notes, and draft actions. The recording is a browser Blob only; the submission form contains duration and self-review metadata, never a file input or audio upload.
 
 ## UI deliverable boundary
 

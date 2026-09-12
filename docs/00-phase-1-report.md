@@ -4,7 +4,7 @@ This is the controlling Phase 1 summary. Detailed specifications are linked in S
 
 ## Delivery status after Phase 1
 
-The Phase 1 design has since been implemented through Sprint 6. The InfinityFree production database contains the preserved Sprint 0–2 content, the Sprint 3 assessment dependency block, and Sprint 6 Writing submissions: 19 tables and 18 unique migration records. Sprint 4 and Sprint 5 added application flows over existing tables; Sprint 6 added the forward-only `writing_submissions` table and two original Writing prompts. Speaking remains unopened.
+The Phase 1 design has since been implemented through Sprint 7. The InfinityFree production database contains the preserved Sprint 0–2 content, the Sprint 3 assessment dependency block, Sprint 6 Writing submissions, and Sprint 7 Speaking metadata: 20 tables and 19 unique migration records. Sprint 4 and Sprint 5 added application flows over existing tables; Sprint 6 added `writing_submissions`; Sprint 7 adds metadata-only `speaking_submissions` and three original Speaking prompts. No server-side Speaking audio is stored.
 
 # A. Executive Summary
 

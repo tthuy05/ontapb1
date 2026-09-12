@@ -75,6 +75,12 @@ For every MVP objective type, table-driven unit cases cover correct, incorrect, 
 - Speaking server requests contain notes/metadata only; manual network inspection confirms recorded blobs are not uploaded.
 - Browser checks cover supported codec, fallback codec, denied permission, missing device, insecure-context development warning and unsupported API.
 
+## Sprint 7 verification record — local implementation checkpoint
+
+The Sprint 7 feature suite passes 7 tests and 43 assertions. It covers owner protection, active/draft/topic visibility, draft-to-submitted metadata, duration bounds, immutable submitted practice, prompt snapshots, original-content management/provenance, and the metadata-only schema/indexes. The full regression suite passes 91 tests and 592 assertions. SQLite `migrate:fresh --seed` reaches the new migration and `SprintSevenContentSeeder`; the production SQL audit finds no executable `ALTER TABLE`, `DROP`, `TRUNCATE`, `DELETE`, database recreation, or reset statement.
+
+The hosted manual matrix remains part of the deployment gate: Chromium/HTTPS with allowed microphone, denied permission, unsupported/insecure fallback, local playback/download, no audio request, and mobile-width overflow checks. A supported browser must prove recording stays local; fallback cases must still save notes and metadata.
+
 ## VSTEP mock structural tests
 
 When an exam is labeled as a strict full-format simulation, a validator/test fixture checks the approved structure: Listening 3 parts/35 objective questions/about 40 minutes; Reading 4 passages/40 questions/60 minutes; Writing two tasks/60 minutes with task weighting metadata; Speaking three parts/about 12 minutes. Content-length conflict and provider-specific operational rules remain warnings unless resolved by an approved source.

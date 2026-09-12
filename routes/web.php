@@ -15,6 +15,7 @@ use App\Http\Controllers\Manage\GrammarLessonController as ManageGrammarLessonCo
 use App\Http\Controllers\Manage\ListeningContentController as ManageListeningContentController;
 use App\Http\Controllers\Manage\PassageController as ManagePassageController;
 use App\Http\Controllers\Manage\QuestionController as ManageQuestionController;
+use App\Http\Controllers\Manage\SpeakingPromptController as ManageSpeakingPromptController;
 use App\Http\Controllers\Manage\TopicController as ManageTopicController;
 use App\Http\Controllers\Manage\VocabularyController as ManageVocabularyController;
 use App\Http\Controllers\Manage\WritingPromptController as ManageWritingPromptController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ReadingController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SpeakingController;
 use App\Http\Controllers\VocabularyController;
 use App\Http\Controllers\WritingController;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -68,6 +70,12 @@ Route::middleware('owner')->group(function (): void {
     Route::patch('/writing/submissions/{writingSubmission}', [WritingController::class, 'update'])->name('writing.submissions.update');
     Route::post('/writing/{writingPrompt}/submissions', [WritingController::class, 'store'])->name('writing.submissions.store');
     Route::get('/writing/{writingPrompt}', [WritingController::class, 'show'])->name('writing.show');
+
+    Route::get('/speaking', [SpeakingController::class, 'index'])->name('speaking.index');
+    Route::get('/speaking/submissions/{speakingSubmission}', [SpeakingController::class, 'showSubmission'])->name('speaking.submissions.show');
+    Route::patch('/speaking/submissions/{speakingSubmission}', [SpeakingController::class, 'update'])->name('speaking.submissions.update');
+    Route::post('/speaking/{speakingPrompt}/submissions', [SpeakingController::class, 'store'])->name('speaking.submissions.store');
+    Route::get('/speaking/{speakingPrompt}', [SpeakingController::class, 'show'])->name('speaking.show');
 
     Route::get('/practice', [PracticeController::class, 'index'])->name('practice.index');
     Route::get('/practice/{exercise}', [PracticeController::class, 'show'])->name('practice.show');
@@ -137,6 +145,9 @@ Route::middleware('owner')->group(function (): void {
         Route::patch('/writing/{writingPrompt}/status', [ManageWritingPromptController::class, 'updateStatus'])->name('writing.status.update');
         Route::get('/writing/{writingPrompt}/preview', [ManageWritingPromptController::class, 'preview'])->name('writing.preview');
         Route::resource('writing', ManageWritingPromptController::class)->parameters(['writing' => 'writingPrompt']);
+        Route::patch('/speaking/{speakingPrompt}/status', [ManageSpeakingPromptController::class, 'updateStatus'])->name('speaking.status.update');
+        Route::get('/speaking/{speakingPrompt}/preview', [ManageSpeakingPromptController::class, 'preview'])->name('speaking.preview');
+        Route::resource('speaking', ManageSpeakingPromptController::class)->parameters(['speaking' => 'speakingPrompt']);
     });
 
     Route::post('/logout', [OwnerSessionController::class, 'destroy'])->name('logout');
