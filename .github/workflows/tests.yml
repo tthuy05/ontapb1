@@ -1,0 +1,73 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, fileinfo, intl, mbstring, openssl, pdo_sqlite, zip
+          coverage: none
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: vendor/bin/phpunit --no-coverage
+
+  postgresql:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ontapb1_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: testing
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ontapb1_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: ontapb1_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: testing
+      DB_SSLMODE: disable
+      DB_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, fileinfo, intl, mbstring, openssl, pdo_pgsql, zip
+          coverage: none
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: vendor/bin/phpunit --no-coverage
