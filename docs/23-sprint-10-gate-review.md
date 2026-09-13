@@ -36,6 +36,7 @@ Completed without touching production:
 - Direct PHPUnit run against a temporary PostgreSQL 18 cluster: passed, 101 tests and 657 assertions.
 - The two non-portable JSON database assertions found by the PostgreSQL run were changed to load the cast model value and assert the array, preserving the same behavior across engines.
 - Restore rehearsal: all 19 migrations and Sprint 1–9 seeders were applied to a temporary PostgreSQL source database; a 98,631-byte custom-format `pg_dump` restored into a clean second database with matching 20-table, 19-migration and content counts. Restored `content:validate --json` reported 96 records and 0 issues.
+- GitHub Actions cross-database workflow run #4 passed both the SQLite and PostgreSQL jobs after the PostgreSQL connection charset was isolated from the MySQL `utf8mb4` setting.
 - `git diff --check`: passed.
 - The production-only InfinityFree SQL batches remain MySQL/MariaDB scripts and are not treated as PostgreSQL migration input.
 
