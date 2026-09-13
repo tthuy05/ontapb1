@@ -22,21 +22,24 @@ These measurements do not meet the documented trigger “move only if InfinityFr
 
 - Laravel already contains a standard `pgsql` connection block and the migrations use portable Laravel schema primitives.
 - A static application/migration audit found no PostgreSQL-specific application SQL. The only raw query is the portable aggregate projection in `DashboardController`; unsigned schema-builder types are used for existing MySQL/SQLite parity and require a real PostgreSQL run before any engine cutover.
-- The local PHP runtime used for this project does not have `pdo_pgsql` enabled.
+- The local PHP runtime used for this project does not enable `pdo_pgsql` by default, but its bundled extension was loaded transiently for the compatibility run.
 - Docker Compose is installed, but the Docker daemon was unavailable during the review.
 - Render's current Free-instance guidance says Free instances should not be used for production applications: https://render.com/docs/free.
-- Consequently, a full PostgreSQL test run and restore rehearsal were not claimed or attempted.
+- A real PostgreSQL 18 parity run and local dump/restore rehearsal were completed below; no provider migration was created.
 
 ## Local verification
 
 Completed without touching production:
 
 - `composer validate --strict`: passed.
-- Direct PHPUnit run against the configured in-memory SQLite test environment: passed, 101 tests and 655 assertions.
+- Direct PHPUnit run against the configured in-memory SQLite test environment: passed, 101 tests and 657 assertions.
+- Direct PHPUnit run against a temporary PostgreSQL 18 cluster: passed, 101 tests and 657 assertions.
+- The two non-portable JSON database assertions found by the PostgreSQL run were changed to load the cast model value and assert the array, preserving the same behavior across engines.
+- Restore rehearsal: all 19 migrations and Sprint 1–9 seeders were applied to a temporary PostgreSQL source database; a 98,631-byte custom-format `pg_dump` restored into a clean second database with matching 20-table, 19-migration and content counts. Restored `content:validate --json` reported 96 records and 0 issues.
 - `git diff --check`: passed.
 - The production-only InfinityFree SQL batches remain MySQL/MariaDB scripts and are not treated as PostgreSQL migration input.
 
-The direct PHPUnit result is useful regression evidence for the current application, but it is not a substitute for the PostgreSQL parity and restore rehearsal required by this optional migration.
+The PostgreSQL parity and restore evidence is local readiness evidence. It does not activate a provider migration while InfinityFree remains healthy and the documented migration gate is unmet.
 
 ## Revisit trigger
 

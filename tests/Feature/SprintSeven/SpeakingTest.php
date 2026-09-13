@@ -94,7 +94,9 @@ class SpeakingTest extends TestCase
         $response->assertRedirectToRoute('manage.speaking.edit', $prompt);
         $this->asOwner()->get(route('manage.speaking.preview', $prompt))->assertOk()->assertSee('Managed speaking prompt');
         $this->asOwner()->patch(route('manage.speaking.status.update', $prompt), ['status' => 'active'])->assertSessionHas('status');
-        $this->assertDatabaseHas('speaking_prompts', ['id' => $prompt->id, 'status' => 'active', 'suggested_ideas' => '["First idea","Second idea"]']);
+        $savedPrompt = SpeakingPrompt::query()->findOrFail($prompt->id);
+        $this->assertSame('active', $savedPrompt->status);
+        $this->assertSame(['First idea', 'Second idea'], $savedPrompt->suggested_ideas);
     }
 
     public function test_speaking_submission_schema_has_forward_only_metadata_constraints(): void

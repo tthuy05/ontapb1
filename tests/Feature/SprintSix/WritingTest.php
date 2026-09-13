@@ -87,7 +87,9 @@ class WritingTest extends TestCase
         $response->assertRedirectToRoute('manage.writing.edit', $prompt);
         $this->asOwner()->get(route('manage.writing.preview', $prompt))->assertOk()->assertSee('Managed writing prompt');
         $this->asOwner()->patch(route('manage.writing.status.update', $prompt), ['status' => 'active'])->assertSessionHas('status');
-        $this->assertDatabaseHas('writing_prompts', ['id' => $prompt->id, 'status' => 'active', 'checklist' => '["Content","Organization"]']);
+        $savedPrompt = WritingPrompt::query()->findOrFail($prompt->id);
+        $this->assertSame('active', $savedPrompt->status);
+        $this->assertSame(['Content', 'Organization'], $savedPrompt->checklist);
     }
 
     public function test_writing_submission_schema_has_history_constraints(): void
