@@ -45,6 +45,70 @@ class ContentQualityReport
         ];
     }
 
+    public function inventory(): array
+    {
+        $topics = Topic::query()->get(['id', 'area', 'slug', 'status']);
+        $vocabularies = Vocabulary::query()->with('topic')->get(['id', 'topic_id', 'status', 'source_type']);
+        $questions = Question::query()->get(['id', 'topic_id', 'skill', 'type', 'difficulty', 'status', 'source_type']);
+        $writing = WritingPrompt::query()->get(['id', 'task_type', 'status', 'source_type']);
+        $speaking = SpeakingPrompt::query()->get(['id', 'part_type', 'status', 'source_type']);
+        $listening = ListeningContent::query()->get(['id', 'status', 'audio_size_bytes', 'audio_path']);
+
+        return [
+            'generated_at' => now('UTC')->toIso8601String(),
+            'topics_by_area' => $topics->groupBy('area')->map->count()->sortKeys()->all(),
+            'active_vocabulary_by_topic' => $vocabularies
+                ->where('status', 'active')
+                ->groupBy(fn (Vocabulary $item): string => $item->topic?->slug ?? 'unassigned')
+                ->map->count()
+                ->sortKeys()
+                ->all(),
+            'active_questions_by_skill' => $questions
+                ->where('status', 'active')
+                ->groupBy('skill')
+                ->map->count()
+                ->sortKeys()
+                ->all(),
+            'active_questions_by_type_and_difficulty' => $questions
+                ->where('status', 'active')
+                ->groupBy(fn (Question $item): string => $item->type.':difficulty-'.$item->difficulty)
+                ->map->count()
+                ->sortKeys()
+                ->all(),
+            'writing_by_task_and_status' => $writing
+                ->groupBy(fn (WritingPrompt $item): string => $item->task_type.':'.$item->status)
+                ->map->count()
+                ->sortKeys()
+                ->all(),
+            'speaking_by_part_and_status' => $speaking
+                ->groupBy(fn (SpeakingPrompt $item): string => $item->part_type.':'.$item->status)
+                ->map->count()
+                ->sortKeys()
+                ->all(),
+            'source_and_status' => [
+                'vocabularies' => $this->groupSourceAndStatus($vocabularies),
+                'questions' => $this->groupSourceAndStatus($questions),
+                'writing_prompts' => $this->groupSourceAndStatus($writing),
+                'speaking_prompts' => $this->groupSourceAndStatus($speaking),
+            ],
+            'audio_budget' => [
+                'pieces' => $listening->count(),
+                'active_pieces' => $listening->where('status', 'active')->count(),
+                'pending_recordings' => $listening->filter(fn (ListeningContent $item): bool => str_contains((string) $item->audio_path, '/pending/'))->count(),
+                'declared_bytes' => (int) $listening->sum(fn (ListeningContent $item): int => (int) $item->audio_size_bytes),
+            ],
+        ];
+    }
+
+    private function groupSourceAndStatus(iterable $items): array
+    {
+        return collect($items)
+            ->groupBy(fn (Model $item): string => $item->source_type.':'.$item->status)
+            ->map->count()
+            ->sortKeys()
+            ->all();
+    }
+
     private function scanTopics(array &$issues, array &$counts): void
     {
         if (! $this->hasTable('topics')) {

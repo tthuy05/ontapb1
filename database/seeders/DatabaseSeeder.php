@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SprintFiveContentSeeder::class,
             SprintSixContentSeeder::class,
             SprintSevenContentSeeder::class,
+            SprintNineContentSeeder::class,
         ]);
     }
 }

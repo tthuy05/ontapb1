@@ -2,7 +2,7 @@
 
 Private, single-owner VSTEP Level 3 / B1 study application built with Laravel 13, PHP 8.3+, Blade, Bootstrap, and MariaDB/MySQL.
 
-Sprint 8 hardens the Sprint 0–7 foundation with private study export/content QA commands, write-route throttling, safe error pages, and accessibility refinements. Speaking audio remains browser-local; there is still no registration, `users` table, role system, AI scoring, or server-side Speaking archive.
+Sprint 8 hardens the Sprint 0–7 foundation with private study export/content QA commands, write-route throttling, safe error pages, and accessibility refinements. Sprint 9 adds a controlled original B1 content batch, balance reporting, provenance review, and audio-budget monitoring. Speaking audio remains browser-local; there is still no registration, `users` table, role system, AI scoring, or server-side Speaking archive.
 
 ## Local setup
 
@@ -37,7 +37,7 @@ php artisan db:seed --force
 php artisan serve
 ```
 
-The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question. Sprint 4 adds application-only history/review; Sprint 5 adds the mock-exam flow; Sprint 6 adds Writing practice and its forward-only submission schema; Sprint 7 adds Speaking practice and its metadata-only submission schema; Sprint 8 adds hardening, content QA, export, and accessibility checks.
+The Sprint 1 seed is deliberately small and original: three topics, three vocabulary entries, and one grammar lesson. Sprint 2 adds the small Reading/Listening/question pilot; Sprint 3 adds one original active Reading exercise mapped to the existing Reading question. Sprint 4 adds application-only history/review; Sprint 5 adds the mock-exam flow; Sprint 6 adds Writing practice and its forward-only submission schema; Sprint 7 adds Speaking practice and its metadata-only submission schema; Sprint 8 adds hardening, content QA, export, and accessibility checks; Sprint 9 adds the controlled original B1 content batch in [Document 22](docs/22-sprint-9-content-expansion.md).
 
 ## Checks
 
@@ -50,6 +50,7 @@ pnpm run build
 pnpm audit --prod
 php artisan route:list --except-vendor
 php artisan content:validate
+php artisan content:report
 php artisan study:export --pretty
 ```
 
@@ -86,7 +87,7 @@ InfinityFree Free has a fixed `htdocs` web root and no server-side SSH, Composer
 1. Run `scripts/build-infinityfree-release.ps1` locally. It installs production-only Composer dependencies and builds `public/build`; it never includes `.env`, `node_modules`, local SQLite, logs, caches, tests, source-control metadata, or development packages.
 2. Upload the release contents into the site's `htdocs` directory. The outer `deploy/infinityfree/htdocs.htaccess` file protects Laravel internals and rewrites requests into `public`; keep Laravel's standard `public/.htaccess`.
 3. Create the production `.env` manually in `htdocs` with the direct HTTPS subdomain and panel-provided MySQL values. Use file sessions/cache and secure cookies; never put secrets in Git or logs.
-4. For a new database only, import `database/infinityfree/sprint-0-schema.sql`. For an existing installation, review each forward-only SQL batch against the live schema before importing it once: Sprint 2 uses `database/infinityfree/sprint-2-update.sql`; Sprint 3 uses `database/infinityfree/sprint-3-update.sql`; Sprint 4 is comment-only; Sprint 6 uses `database/infinityfree/sprint-6-update.sql`; Sprint 7 uses `database/infinityfree/sprint-7-update.sql` and adds only `speaking_submissions` plus three original Speaking pilot prompts.
+4. For a new database only, import `database/infinityfree/sprint-0-schema.sql`. For an existing installation, review each forward-only SQL batch against the live schema before importing it once: Sprint 2 uses `database/infinityfree/sprint-2-update.sql`; Sprint 3 uses `database/infinityfree/sprint-3-update.sql`; Sprint 4 is comment-only; Sprint 6 uses `database/infinityfree/sprint-6-update.sql`; Sprint 7 uses `database/infinityfree/sprint-7-update.sql` and adds only `speaking_submissions` plus three original Speaking pilot prompts; Sprint 9 uses `database/infinityfree/sprint-9-update.sql` for original content only and does not change schema or migrations.
 5. Verify the panel's PHP 8.3 and `pdo_mysql`, HTTPS, redirect/security headers, owner login, dashboard, Topics Manage flow, Vocabulary learner/Manage/progress flow, Grammar learner/Manage flow, Reading/Listening, Practice start/save/submit/result, History, wrong-answer Review, mock exams, Writing learner/Manage flow, Speaking learner/Manage/local-recording flow, logout, `GET /health`, and denial of `.env`/source/vendor/storage paths.
 6. Upload each reviewed release over application files while preserving the existing `.env`, `storage`, and database. Never upload the local `.env` or replace runtime storage.
 

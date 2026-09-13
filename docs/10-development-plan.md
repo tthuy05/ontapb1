@@ -193,6 +193,13 @@ Rollback occurs in reverse. Foreign keys and indexes are created with their tabl
 
 Sprint 8 local hardening adds a private allow-listed `study:export` JSON command, a `content:validate` relationship/provenance QA command, repeatable performance measurement, write-route throttling, safe generic error pages, and keyboard/focus/live-region improvements. No schema change or speculative index was required. The implementation and verification record is in [Document 21](21-sprint-8-final-report.md).
 
+### Sprint 9 implementation record — 13 September 2026
+
+- [x] Added the original B1 batch-1 seeder and the idempotent InfinityFree import file without adding a table, migration, or destructive statement.
+- [x] Added eight active vocabulary topics, 32 vocabulary entries, four grammar lessons, four Reading passages, eight reviewed Reading questions, four exercises, four draft Listening scripts with four draft questions, four Writing prompts, and six Speaking prompts.
+- [x] Added `content:report` for topic/skill/type/difficulty balance, source/status distribution, and declared audio-budget monitoring.
+- [x] Added tests for duplicate-safe import behavior, orphan/option integrity through the existing QA command, vocabulary-progress preservation, and report output. Evidence is in [Document 22](22-sprint-9-content-expansion.md).
+
 ## Sprint 9 — controlled content expansion
 
 **Goal:** grow from pilot content to the approved B1 syllabus without breaking quality or quota.
