@@ -21,10 +21,22 @@ These measurements do not meet the documented trigger “move only if InfinityFr
 ## Compatibility readiness
 
 - Laravel already contains a standard `pgsql` connection block and the migrations use portable Laravel schema primitives.
+- A static application/migration audit found no PostgreSQL-specific application SQL. The only raw query is the portable aggregate projection in `DashboardController`; unsigned schema-builder types are used for existing MySQL/SQLite parity and require a real PostgreSQL run before any engine cutover.
 - The local PHP runtime used for this project does not have `pdo_pgsql` enabled.
 - Docker Compose is installed, but the Docker daemon was unavailable during the review.
 - Render's current Free-instance guidance says Free instances should not be used for production applications: https://render.com/docs/free.
 - Consequently, a full PostgreSQL test run and restore rehearsal were not claimed or attempted.
+
+## Local verification
+
+Completed without touching production:
+
+- `composer validate --strict`: passed.
+- Direct PHPUnit run against the configured in-memory SQLite test environment: passed, 101 tests and 655 assertions.
+- `git diff --check`: passed.
+- The production-only InfinityFree SQL batches remain MySQL/MariaDB scripts and are not treated as PostgreSQL migration input.
+
+The direct PHPUnit result is useful regression evidence for the current application, but it is not a substitute for the PostgreSQL parity and restore rehearsal required by this optional migration.
 
 ## Revisit trigger
 
