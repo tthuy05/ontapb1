@@ -23,6 +23,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: cp .env.example .env && php artisan key:generate --ansi
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: vendor/bin/phpunit --no-coverage
@@ -68,6 +69,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: cp .env.example .env && php artisan key:generate --ansi
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: vendor/bin/phpunit --no-coverage
