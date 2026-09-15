@@ -47,7 +47,7 @@ The reviewed [Sprint 7 SQL](../database/infinityfree/sprint-7-update.sql) create
 
 ## Sprint 11 implementation status
 
-Sprint 11 adds only `vocabulary_review_schedules`. It links one-to-one to the existing `vocabulary_progress` row and stores the next due time plus compact scheduler state. The migration and reviewed InfinityFree SQL do not alter, update, or delete any existing table or row. Production remains unchanged until the separate SQL/release approval gate; after an approved import the expected state is 21 tables and 20 migration rows.
+Sprint 11 adds only `vocabulary_review_schedules`. It links one-to-one to the existing `vocabulary_progress` row and stores the next due time plus compact scheduler state. The migration and reviewed InfinityFree SQL do not alter, update, or delete any existing table or row. Production verification after the one approved import shows 21 tables and 20 migration rows, with zero initial schedule rows and the existing content/progress counts preserved.
 
 ## Tables
 

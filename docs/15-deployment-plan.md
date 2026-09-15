@@ -239,11 +239,11 @@ Before import, export the existing production database and record the complete S
 
 Upload only the reviewed application release while preserving `.env` and `storage`. Run `content:validate` and `content:report` through an approved local/release operator path, then smoke-test the new active learner pages, confirm draft Listening remains hidden, and repeat the Sprint 0–8 learner, Manage, auth, security, result/history, Writing, Speaking, and responsive regression checks. Do not activate pending audio without a separate recording/provenance review. The detailed batch evidence is in [Document 22](22-sprint-9-content-expansion.md).
 
-## Sprint 11 pending production update
+## Sprint 11 production update
 
-Sprint 11 is locally implemented but not yet written to production. Its reviewed SQL candidate creates only `vocabulary_review_schedules` and records migration `2026_09_13_002000_create_vocabulary_review_schedules_table` in batch 6. It contains no `ALTER TABLE`, `DROP`, `TRUNCATE`, destructive `DELETE`, database recreation, reset, content insert, or update to existing vocabulary progress.
+Sprint 11 was imported exactly once after a read-only audit confirmed the 20-table/19-migration baseline. Its reviewed SQL created only `vocabulary_review_schedules` and recorded migration `2026_09_13_002000_create_vocabulary_review_schedules_table` in batch 6. It contains no `ALTER TABLE`, `DROP`, `TRUNCATE`, destructive `DELETE`, database recreation, reset, content insert, or update to existing vocabulary progress.
 
-Immediately before the first write, re-audit the expected Sprint 9/10 production baseline: 20 tables, 19 migration rows, all content counts, vocabulary progress, `.env`, and runtime storage. If the baseline differs, stop. After approval, import [Sprint 11 SQL](../database/infinityfree/sprint-11-update.sql) exactly once, verify 21 tables and 20 migrations with zero initial schedule rows, then upload the reviewed release without `.env` or `storage`. Hosted verification must cover the queue, rating persistence, due count, future scheduling, auth/CSRF/throttle behavior, and Sprint 0–10 regressions.
+The final production state is 21 tables, 20 migrations, 191 total rows, and zero rows in `vocabulary_review_schedules`. Existing content and progress counts remain unchanged. The reviewed release was uploaded/extracted without `.env` or `storage`; the production root retained `.env` at 642 B and the existing `storage` directory. Hosted GET smoke checks passed for the dashboard, spaced-review queue/reveal, learner pages, Manage Topics, and Sprint 0–10 routes. A direct browser navigation to `/health` remained blocked by the client edge, so no new health response claim is made from that navigation.
 
 ## Fallback: Render Free + Neon Free
 
