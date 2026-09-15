@@ -136,7 +136,7 @@ $manifest = [ordered]@{
     document_root = 'htdocs'
     environment_file = 'Create manually in htdocs; never upload local .env'
     database_bootstrap = 'database/infinityfree/sprint-0-schema.sql for a new database only'
-    database_update = 'Sprint 9 batch 1: original content only; review and import database/infinityfree/sprint-9-update.sql once'
+    database_update = 'Sprint 11: review and import database/infinityfree/sprint-11-update.sql exactly once after confirming the 20-table/19-migration baseline'
     runtime_policy = 'Preserve existing htdocs/.env and htdocs/storage; release contains neither'
     excluded = @('.env', 'storage', 'node_modules', 'tests', 'logs', 'local database files', 'source-control metadata', 'dev Composer packages')
 }

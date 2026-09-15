@@ -25,6 +25,7 @@ use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SpeakingController;
 use App\Http\Controllers\VocabularyController;
+use App\Http\Controllers\VocabularyReviewController;
 use App\Http\Controllers\WritingController;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -53,6 +54,10 @@ Route::middleware('owner')->group(function (): void {
     Route::get('/', DashboardController::class)->name('dashboard');
 
     Route::get('/vocabulary', [VocabularyController::class, 'index'])->name('vocabulary.index');
+    Route::get('/vocabulary/review', [VocabularyReviewController::class, 'index'])->name('vocabulary.review.index');
+    Route::post('/vocabulary/{vocabulary}/review', [VocabularyReviewController::class, 'store'])
+        ->middleware('throttle:study-write')
+        ->name('vocabulary.review.store');
     Route::get('/vocabulary/{vocabulary}', [VocabularyController::class, 'show'])->name('vocabulary.show');
     Route::patch('/vocabulary/{vocabulary}/progress', [VocabularyController::class, 'updateProgress'])
         ->middleware('throttle:study-write')

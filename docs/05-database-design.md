@@ -45,6 +45,10 @@ Sprint 7 adds only the forward-only `speaking_submissions` table. Its three fore
 
 The reviewed [Sprint 7 SQL](../database/infinityfree/sprint-7-update.sql) creates one table, records migration `2026_09_08_001900_create_speaking_submissions_table` in batch 5, and upserts three original active pilot prompts into the existing `speaking_prompts` table. It contains no executable `ALTER TABLE`, destructive statement, database recreation, or reset operation. The expected successful production state is 20 tables and 19 migration rows; the hosted rehearsal may add one metadata-only submitted row while leaving all prior content and vocabulary progress unchanged.
 
+## Sprint 11 implementation status
+
+Sprint 11 adds only `vocabulary_review_schedules`. It links one-to-one to the existing `vocabulary_progress` row and stores the next due time plus compact scheduler state. The migration and reviewed InfinityFree SQL do not alter, update, or delete any existing table or row. Production remains unchanged until the separate SQL/release approval gate; after an approved import the expected state is 21 tables and 20 migration rows.
+
 ## Tables
 
 ### `topics`
@@ -97,6 +101,22 @@ Purpose: current lightweight review state; detailed quiz performance remains in 
 | `correct_count`, `incorrect_count` | INT UNSIGNED DEFAULT 0 |
 | `last_reviewed_at` | TIMESTAMP NULL |
 | timestamps | standard |
+
+### `vocabulary_review_schedules`
+
+Purpose: deterministic next-review scheduling for the existing single-owner vocabulary progress row.
+
+| Column | Type / rules |
+|---|---|
+| `id` | BIGINT UNSIGNED PK |
+| `vocabulary_progress_id` | FK vocabulary_progress, unique, cascade only when its parent progress row is deleted |
+| `due_at` | TIMESTAMP, indexed |
+| `interval_days` | SMALLINT UNSIGNED DEFAULT 0; `0` represents the ten-minute relearning step |
+| `streak`, `lapses` | INT UNSIGNED DEFAULT 0 |
+| `last_rating` | VARCHAR(8) NULL; application values `again`, `hard`, `good`, `easy` |
+| timestamps | standard |
+
+No historical content or progress row is backfilled or rewritten. Existing `learning`/`review` progress without a schedule enters the queue as legacy due work; `new` or untracked active vocabulary is capped at five cards per queue.
 
 ### `grammar_lessons`
 

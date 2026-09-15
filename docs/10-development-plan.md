@@ -29,6 +29,7 @@ Create schema in this dependency order:
 17. `attempt_answers`
 18. `writing_submissions`
 19. `speaking_submissions`
+20. `vocabulary_review_schedules`
 
 Rollback occurs in reverse. Foreign keys and indexes are created with their tables; cross-table checks that MySQL cannot express cleanly remain transactional application invariants with tests.
 
@@ -224,6 +225,19 @@ Sprint 8 local hardening adds a private allow-listed `study:export` JSON command
 - Deployment: Git-connected Render service, Neon secrets, static audio shipped with release, database restore.
 - Risks: two-provider outages/quotas, free-service suspension, DB semantic differences.
 - Definition of done: parity and restore verified before DNS/bookmark cutover; InfinityFree SQL/application export retained for rollback.
+
+## Sprint 11 — vocabulary spaced review
+
+**Goal:** turn the existing lightweight vocabulary progress state into a useful daily review queue without changing or deleting prior study history.
+
+- Scope/tasks: due/new queue, accessible answer reveal, `Again`/`Hard`/`Good`/`Easy` ratings, deterministic interval scheduling, dashboard due count, and safe legacy-progress adoption.
+- Dependencies: the existing `vocabularies` and one-to-one `vocabulary_progress` records from Sprint 1.
+- Tables/models: add only `vocabulary_review_schedules`, linked one-to-one to `vocabulary_progress`; no existing table is altered.
+- Controllers/requests/routes/views: `VocabularyReviewController`, rating Request, scheduler service, `/vocabulary/review`, rating POST route, queue page, and dashboard/vocabulary entry points.
+- Tests: auth, active-content filtering, due ordering, five-new-card cap, rating transitions, counters, one-to-one constraint, cross-database parity, and forward-only SQL audit.
+- Deployment: review the production baseline and SQL before importing once; upload only the reviewed release while preserving `.env`, runtime storage, and all Sprint 0–10 data.
+- Risks: an opaque algorithm or an oversized new-card queue can reduce trust; intervals therefore use documented deterministic rules and a five-card limit.
+- Definition of done: local SQLite/PostgreSQL suites and disposable migration/seed QA pass, production SQL is approved/imported exactly once, the release is uploaded safely, and hosted Sprint 0–10 regressions plus the new review flow pass.
 
 ## Cross-sprint controls
 

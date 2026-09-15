@@ -95,6 +95,12 @@ The disposable SQLite restore rehearsal rebuilt all 19 migrations and all approv
 
 Manual accessibility checks for the release gate cover keyboard focus visibility, skip-link focus, live status/error announcements, 360px/768px/desktop layout, 200% zoom, reduced motion, and browser-local Speaking fallback behavior. Error responses use generic messages and do not render exception details.
 
+## Sprint 11 local verification record — 15 September 2026
+
+The focused Sprint 11 suite covers the one-to-one schedule schema/indexes, cascade behavior, owner protection, due/legacy/new queue ordering, five-new-card limit, active-content filtering, deterministic rating transitions, counters, dashboard due count, and the forward-only InfinityFree SQL contract. The full suite passes on both in-memory SQLite and a temporary PostgreSQL 18 cluster with 112 tests and 728 assertions.
+
+A disposable SQLite `migrate:fresh --seed` rehearsal applies all 20 migrations, creates 21 tables, and leaves `vocabulary_review_schedules` empty. `content:validate --json` still reports 96 records and 0 issues with the approved Sprint 1–9 content counts. No production database or credential is used for local verification.
+
 ## Performance and resource tests
 
 Representative data should include at least the expected MVP bank scale, not only five records. Measure:

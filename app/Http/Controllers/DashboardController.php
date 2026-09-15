@@ -7,11 +7,12 @@ use App\Models\AttemptAnswer;
 use App\Models\GrammarLesson;
 use App\Models\Vocabulary;
 use App\Models\VocabularyProgress;
+use App\Services\VocabularyReviewScheduler;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(VocabularyReviewScheduler $reviewScheduler): View
     {
         $activeVocabularyCount = Vocabulary::query()
             ->active()
@@ -41,6 +42,7 @@ class DashboardController extends Controller
                 'learned' => (int) $progressCounts->get('learned', 0),
                 'review' => (int) $progressCounts->get('review', 0),
             ],
+            'vocabularyReviewSummary' => $reviewScheduler->summary(),
             'recentAttempts' => Attempt::query()
                 ->with(['exercise', 'exam'])
                 ->latest('started_at')

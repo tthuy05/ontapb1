@@ -9,7 +9,10 @@
             <h1 class="h2 mb-1">Vocabulary</h1>
             <p class="text-body-secondary mb-0">Browse active words and keep a simple review state.</p>
         </div>
-        <a class="btn btn-outline-primary" href="{{ route('manage.vocabulary.index') }}">Manage vocabulary</a>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" href="{{ route('vocabulary.review.index') }}">Review vocabulary</a>
+            <a class="btn btn-outline-primary" href="{{ route('manage.vocabulary.index') }}">Manage vocabulary</a>
+        </div>
     </div>
 
     <form class="card card-body mb-4" method="GET" action="{{ route('vocabulary.index') }}">

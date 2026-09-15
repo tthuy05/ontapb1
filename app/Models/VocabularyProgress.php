@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class VocabularyProgress extends Model
 {
@@ -36,5 +37,10 @@ class VocabularyProgress extends Model
     public function vocabulary(): BelongsTo
     {
         return $this->belongsTo(Vocabulary::class);
+    }
+
+    public function reviewSchedule(): HasOne
+    {
+        return $this->hasOne(VocabularyReviewSchedule::class);
     }
 }

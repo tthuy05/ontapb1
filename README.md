@@ -91,7 +91,7 @@ InfinityFree Free has a fixed `htdocs` web root and no server-side SSH, Composer
 5. Verify the panel's PHP 8.3 and `pdo_mysql`, HTTPS, redirect/security headers, owner login, dashboard, Topics Manage flow, Vocabulary learner/Manage/progress flow, Grammar learner/Manage flow, Reading/Listening, Practice start/save/submit/result, History, wrong-answer Review, mock exams, Writing learner/Manage flow, Speaking learner/Manage/local-recording flow, logout, `GET /health`, and denial of `.env`/source/vendor/storage paths.
 6. Upload each reviewed release over application files while preserving the existing `.env`, `storage`, and database. Never upload the local `.env` or replace runtime storage.
 
-The full workflow, SQL import method, future forward-only schema strategy, persistence behavior, and rollback procedure are in [docs/15-deployment-plan.md](docs/15-deployment-plan.md). Render + Neon remains an inactive fallback requiring separate approval.
+The full workflow, SQL import method, future forward-only schema strategy, persistence behavior, and rollback procedure are in [docs/15-deployment-plan.md](docs/15-deployment-plan.md). Sprint 11 vocabulary spaced review is implemented locally and awaits its separate production SQL/release approval; Render + Neon remains an inactive fallback requiring separate approval.
 
 ## Rollback
 

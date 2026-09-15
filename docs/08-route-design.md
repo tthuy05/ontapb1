@@ -44,8 +44,10 @@ The health endpoint must not reveal versions, environment values, paths, stack t
 |---|---|---|---|---|
 | GET | `/` | `dashboard` | `DashboardController@index` | Progress summary and continue actions |
 | GET | `/vocabulary` | `vocabulary.index` | `VocabularyController@index` | Filter active words by topic/review state |
+| GET | `/vocabulary/review` | `vocabulary.review.index` | `VocabularyReviewController@index` | Show due, legacy, and capped new vocabulary cards |
 | GET | `/vocabulary/{vocabulary}` | `vocabulary.show` | `VocabularyController@show` | Word detail and examples |
 | PATCH | `/vocabulary/{vocabulary}/progress` | `vocabulary.progress.update` | `VocabularyController@updateProgress` | Mark learning/review state |
+| POST | `/vocabulary/{vocabulary}/review` | `vocabulary.review.store` | `VocabularyReviewController@store` | Validate a recall rating and schedule the next review |
 | GET | `/grammar` | `grammar.index` | `GrammarController@index` | Active grammar syllabus |
 | GET | `/grammar/{grammarLesson}` | `grammar.show` | `GrammarController@show` | Lesson, examples, and linked practice |
 | GET | `/reading` | `reading.index` | `ReadingController@index` | Reading content and linked exercises |

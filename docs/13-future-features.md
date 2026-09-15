@@ -8,7 +8,7 @@ Future work is considered only after the MVP is used with real study content. A 
 
 | Candidate | Benefit | Prerequisite / trigger | Main cost or risk |
 |---|---|---|---|
-| Spaced-review scheduler | Better vocabulary retention | Enough review history and owner desire for daily queue | Scheduling logic and notification expectations |
+| Spaced-review scheduler | Implemented locally in Sprint 11 with deterministic due/new queue | Production SQL/release approval and real-use feedback | Scheduling logic must remain understandable; no notification service is added |
 | Additional objective types | More varied practice | Bank needs multi-select/fill-in and scoring rules are approved | Normalization/scoring complexity |
 | Content batch import/export | Faster curated bank maintenance | Manual entry is a measured bottleneck | Validation, duplicate and licensing errors |
 | Search across all content | Faster retrieval | Content volume makes module filters insufficient | Index/query and ranking work |

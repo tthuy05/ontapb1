@@ -39,10 +39,13 @@
                 </a>
             </div>
             <div class="col-6 col-lg-3">
-                <a class="summary-card card h-100 text-decoration-none" href="{{ route('vocabulary.index', ['state' => 'review']) }}">
+                <a class="summary-card card h-100 text-decoration-none" href="{{ route('vocabulary.review.index') }}">
                     <div class="card-body">
-                        <span class="d-block text-body-secondary">Review</span>
-                        <strong class="display-6 text-body">{{ $progressCounts['review'] }}</strong>
+                        <span class="d-block text-body-secondary">Vocabulary due</span>
+                        <strong class="display-6 text-body">{{ $vocabularyReviewSummary['due'] }}</strong>
+                        @if ($vocabularyReviewSummary['new'] > 0)
+                            <span class="d-block small text-body-secondary">{{ $vocabularyReviewSummary['new'] }} new available</span>
+                        @endif
                     </div>
                 </a>
             </div>

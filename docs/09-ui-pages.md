@@ -32,6 +32,7 @@ The deployed Sprint 3 pages remain the Practice catalog, exercise detail/start p
 | Login | Owner sign-in only | Password field, show/hide, submit, generic error | Proper label/autocomplete; no credential hint |
 | Dashboard | Continue attempt, recent results, review due, content shortcuts | Summary cards, recent table, quick-start links | Cards stack; headings describe time frame |
 | Vocabulary list | Topic, term, part of speech, review state | Search, topic/state filter, pagination, reveal translation | Filter form works without JS |
+| Vocabulary review | Due/legacy/new card, topic, term, hidden meaning/example, schedule status | Native-details reveal; Again/Hard/Good/Easy POST buttons | Five-new-card cap; works without JS and exposes text labels |
 | Vocabulary detail | Definition, example, pronunciation, notes | Play audio when present; update state | Text alternative for missing audio |
 | Grammar list/detail | Syllabus order, lesson, examples, common mistakes | Topic filter, linked practice | Tables reflow; examples use semantic markup |
 | Reading/listening library | Active content and difficulty | Filters, content card, linked exercise | Audio uses native controls and transcript policy |

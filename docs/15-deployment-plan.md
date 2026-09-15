@@ -239,6 +239,12 @@ Before import, export the existing production database and record the complete S
 
 Upload only the reviewed application release while preserving `.env` and `storage`. Run `content:validate` and `content:report` through an approved local/release operator path, then smoke-test the new active learner pages, confirm draft Listening remains hidden, and repeat the Sprint 0–8 learner, Manage, auth, security, result/history, Writing, Speaking, and responsive regression checks. Do not activate pending audio without a separate recording/provenance review. The detailed batch evidence is in [Document 22](22-sprint-9-content-expansion.md).
 
+## Sprint 11 pending production update
+
+Sprint 11 is locally implemented but not yet written to production. Its reviewed SQL candidate creates only `vocabulary_review_schedules` and records migration `2026_09_13_002000_create_vocabulary_review_schedules_table` in batch 6. It contains no `ALTER TABLE`, `DROP`, `TRUNCATE`, destructive `DELETE`, database recreation, reset, content insert, or update to existing vocabulary progress.
+
+Immediately before the first write, re-audit the expected Sprint 9/10 production baseline: 20 tables, 19 migration rows, all content counts, vocabulary progress, `.env`, and runtime storage. If the baseline differs, stop. After approval, import [Sprint 11 SQL](../database/infinityfree/sprint-11-update.sql) exactly once, verify 21 tables and 20 migrations with zero initial schedule rows, then upload the reviewed release without `.env` or `storage`. Hosted verification must cover the queue, rating persistence, due count, future scheduling, auth/CSRF/throttle behavior, and Sprint 0–10 regressions.
+
 ## Fallback: Render Free + Neon Free
 
 Keep this path documented but inactive. Render Free requires a Docker PHP runtime, has an ephemeral filesystem and cold starts, and its own documentation says Free instances should not be used for production. Neon Free changes the production engine to PostgreSQL and has its own compute, storage, restore-history, and network quotas. Activation requires an explicit owner decision, a PostgreSQL compatibility pass, a restore rehearsal, and a separate deployment review. Do not create Render, Neon, Docker, or paid resources for Sprint 0 while InfinityFree remains viable.
